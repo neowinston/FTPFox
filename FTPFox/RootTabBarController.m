@@ -8,6 +8,8 @@
 
 #import "RootTabBarController.h"
 #import "LoginViewController.h"
+#import "FilesTableViewController.h"
+#import "ServerListViewController.h"
 
 @interface RootTabBarController ()
 
@@ -48,11 +50,17 @@
 }
 
 - (void)tabSelectedAtIndex:(NSUInteger)selectedIndex {
+    UINavigationController *navCtlr = [[self viewControllers] objectAtIndex:1];
+    FilesTableViewController *fileListVC = [[navCtlr viewControllers] objectAtIndex:0];
+    ServerListViewController *serversListVC = [[self viewControllers] objectAtIndex:0];
+    serversListVC.delegate = fileListVC;
+    
     NSDictionary *allCred = [[NSURLCredentialStorage sharedCredentialStorage] allCredentials];
     if (nil == allCred || allCred.count <= 0) {
         UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
         LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
         loginViewController.selectedSpace = nil;
+        loginViewController.delegate  = fileListVC;
         [self presentViewController:loginViewController animated:YES completion:^{
         }];
     }

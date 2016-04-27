@@ -9,7 +9,8 @@
 #import "FilesTableViewController.h"
 #import "Constants.h"
 
-@interface FilesTableViewController () 
+@interface FilesTableViewController ()
+
 @property(nonatomic, strong) NSArray *fileListArray;
 
 @end
@@ -24,15 +25,15 @@
     return self;
 }
 
-
 - (void)viewDidLoad {
+    NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
+    
+    if (nil == hostName) {
+        hostName = @"Files";
+    }
+    
+    [self.navigationItem setTitle:hostName];
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -43,13 +44,12 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 0;
+    return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 0;
+    return self.fileListArray.count;
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSString *fileNameReuseIdentifier = @"fileNameReuseIdentifier";
@@ -65,49 +65,36 @@
     return cell;
 }
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+    
+//    NSURLProtectionSpace *protectionSpace = [self.fileListArray objectAtIndex:indexPath.row];
+//    
+//    NSDictionary *credDic = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:protectionSpace];
+//    NSArray *userNameArray = [credDic allKeys];
+//    NSURLCredential *cred = [credDic objectForKey:[userNameArray objectAtIndex:0]];
+//    
+//    if ([cred hasPassword])
+//    {
+//        self.requestsManager = [[GRRequestsManager alloc] initWithHostname:[protectionSpace host]
+//                                                                      user:[cred user]
+//                                                                  password:[cred password]];
+//        self.requestsManager.delegate = self;
+//        [self.requestsManager addRequestForListDirectoryAtPath:@"/"];
+//        [self.requestsManager startProcessingRequests];
+//    }
+//    else
+//    {
+//        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+//        LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+//        loginViewController.selectedSpace = protectionSpace;
+//        [self presentViewController:loginViewController animated:YES completion:^{
+//        }];
+//    }
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 - (void)loginCompletedWithInfo:(NSDictionary *) userInfo {
     
@@ -121,6 +108,5 @@
         [self.tableView reloadData];
     }
 }
-
 
 @end

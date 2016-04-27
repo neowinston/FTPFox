@@ -23,18 +23,4 @@ extern NSString *const  kFileListingErrorKey;
 extern NSString *const  kLoginErrorKey;
 
 
-extern NSString *const  kTeamObjKey;
-extern NSString *const  kTeamNameKey;
-extern NSString *const  kPlayerListKey;
-
-extern NSString *const  kPlayerNameKey;
-extern NSString *const  kPlayerNationalityKey;
-extern NSString *const  kPlayerTeamKey;
-extern NSString *const  kPlayerDOBKey;
-
-extern NSString *const  kIsNewEntryKey;
-
-extern NSString *const  kOldTeamNameKey;
-extern NSString *const  kOldPlayerNameKey;
-
 @end

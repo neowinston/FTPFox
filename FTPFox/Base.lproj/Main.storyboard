@@ -18,6 +18,22 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="quk-nz-XFk">
+                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="44" id="hJT-gs-fAa"/>
+                                </constraints>
+                                <items>
+                                    <navigationItem title="Server Details" id="9Em-W1-sDL">
+                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Pcz-HG-eAJ">
+                                            <inset key="imageInsets" minX="-10" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                            <connections>
+                                                <action selector="cancelButtonClicked:" destination="2lQ-jz-9pN" id="g5g-Zw-oVI"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
+                                </items>
+                            </navigationBar>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Host Name (or IP)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xfB-vb-iYV">
                                 <rect key="frame" x="20" y="84" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -49,21 +65,6 @@
                                     <action selector="loginButtonClicked:" destination="2lQ-jz-9pN" eventType="touchUpInside" id="y8e-LX-7qS"/>
                                 </connections>
                             </button>
-                            <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="quk-nz-XFk">
-                                <rect key="frame" x="0.0" y="20" width="600" height="44"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="44" id="hJT-gs-fAa"/>
-                                </constraints>
-                                <items>
-                                    <navigationItem title="Server Details" id="9Em-W1-sDL">
-                                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Pcz-HG-eAJ">
-                                            <connections>
-                                                <action selector="cancelButtonClicked:" destination="2lQ-jz-9pN" id="g5g-Zw-oVI"/>
-                                            </connections>
-                                        </barButtonItem>
-                                    </navigationItem>
-                                </items>
-                            </navigationBar>
                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="f3v-hJ-gpu">
                                 <rect key="frame" x="20" y="234" width="51" height="31"/>
                                 <connections>
@@ -84,12 +85,14 @@
                             <constraint firstItem="ETL-5f-8Km" firstAttribute="leading" secondItem="82C-xX-zAd" secondAttribute="leading" id="6qO-R1-u5u"/>
                             <constraint firstItem="quk-nz-XFk" firstAttribute="centerX" secondItem="vyp-Qi-NSi" secondAttribute="centerX" id="753-gm-Qfa"/>
                             <constraint firstItem="f3v-hJ-gpu" firstAttribute="leading" secondItem="ETL-5f-8Km" secondAttribute="leading" id="AhS-cG-oiq"/>
+                            <constraint firstItem="quk-nz-XFk" firstAttribute="leading" secondItem="vyp-Qi-NSi" secondAttribute="leadingMargin" id="Dan-wp-lP6"/>
                             <constraint firstItem="7e8-Yd-0kn" firstAttribute="trailing" secondItem="ETL-5f-8Km" secondAttribute="trailing" id="FnE-GB-p7t"/>
                             <constraint firstItem="xfB-vb-iYV" firstAttribute="top" secondItem="quk-nz-XFk" secondAttribute="bottom" constant="20" id="LE5-da-QGQ"/>
                             <constraint firstItem="w5T-aY-lTY" firstAttribute="leading" secondItem="f3v-hJ-gpu" secondAttribute="trailing" constant="8" id="O4z-kZ-w8F"/>
                             <constraint firstItem="7e8-Yd-0kn" firstAttribute="leading" secondItem="xfB-vb-iYV" secondAttribute="leading" id="RSH-5S-wPZ"/>
+                            <constraint firstItem="quk-nz-XFk" firstAttribute="trailing" secondItem="vyp-Qi-NSi" secondAttribute="trailingMargin" constant="20" id="dIQ-Bu-NSi"/>
                             <constraint firstItem="ETL-5f-8Km" firstAttribute="leading" secondItem="7e8-Yd-0kn" secondAttribute="leading" id="frb-Ea-QrS"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="quk-nz-XFk" secondAttribute="trailing" constant="-20" id="gbU-DO-VEN"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="quk-nz-XFk" secondAttribute="trailing" id="gbU-DO-VEN"/>
                             <constraint firstItem="quk-nz-XFk" firstAttribute="leading" secondItem="vyp-Qi-NSi" secondAttribute="leadingMargin" constant="-20" id="jp8-1F-M3F"/>
                             <constraint firstItem="ETL-5f-8Km" firstAttribute="top" secondItem="7e8-Yd-0kn" secondAttribute="bottom" constant="20" id="lJt-cz-01R"/>
                             <constraint firstItem="7e8-Yd-0kn" firstAttribute="trailing" secondItem="xfB-vb-iYV" secondAttribute="trailing" id="nPr-mo-HxT"/>
@@ -100,6 +103,12 @@
                             <constraint firstItem="7e8-Yd-0kn" firstAttribute="leading" secondItem="vyp-Qi-NSi" secondAttribute="leadingMargin" id="vcS-bD-MpG"/>
                             <constraint firstItem="82C-xX-zAd" firstAttribute="top" secondItem="f3v-hJ-gpu" secondAttribute="bottom" constant="20" id="wYP-fL-LOc"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="Dan-wp-lP6"/>
+                                <exclude reference="gbU-DO-VEN"/>
+                            </mask>
+                        </variation>
                     </view>
                     <connections>
                         <outlet property="passwordTextField" destination="ETL-5f-8Km" id="BQg-Gh-0LS"/>
@@ -109,7 +118,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ife-e5-blk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2574" y="-643"/>
+            <point key="canvasLocation" x="-2581" y="-666"/>
         </scene>
         <!--Root Tab Bar Controller-->
         <scene sceneID="yar-GD-kbi">
@@ -128,7 +137,7 @@
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cEV-3g-gAd" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1708" y="-296"/>
+            <point key="canvasLocation" x="-1827" y="-550"/>
         </scene>
         <!--Uploads-->
         <scene sceneID="yvS-pR-IPO">
@@ -188,7 +197,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="w94-Yl-wJG">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="fileNameReuseIdentifier" id="w94-Yl-wJG">
                                 <rect key="frame" x="0.0" y="92" width="600" height="44"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="w94-Yl-wJG" id="v1l-Sa-oOK">
@@ -227,7 +236,7 @@
                                 </constraints>
                                 <items>
                                     <navigationItem title="Servers" id="Mha-hT-APd">
-                                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="pko-aN-qxv">
+                                        <barButtonItem key="rightBarButtonItem" style="plain" systemItem="add" id="pko-aN-qxv">
                                             <connections>
                                                 <segue destination="2lQ-jz-9pN" kind="presentation" id="gDI-zb-R8w"/>
                                             </connections>
@@ -264,7 +273,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1F4-FU-rvY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1414" y="-105"/>
+            <point key="canvasLocation" x="-1440" y="-591"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="5sa-g9-4zZ">
