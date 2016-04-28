@@ -53,7 +53,7 @@
     FTPRequestController *requestController = [[FTPRequestController alloc] init];
     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.filePath, kFilePathKey, nil];
 
-    self.request = [requestController getFileListWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
+    self.request = [requestController downloadFileWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
         [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
         
         if (nil != complInfo) {

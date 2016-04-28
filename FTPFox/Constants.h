@@ -25,6 +25,9 @@ extern NSString *const  kSavePasswordEnabledKey;
 extern NSString *const  kFileListArrayKey;
 extern NSString *const  kFileListingErrorKey;
 extern NSString *const  kLoginErrorKey;
+extern NSString *const  kDownloadErrorKey ;
+extern NSString *const  kUploadErrorKey;
+
 
 extern NSString *const  kFilePathKey;
 

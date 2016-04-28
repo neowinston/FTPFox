@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface UploadListViewController : UIViewController
+@interface UploadListViewController : UIViewController <UINavigationControllerDelegate, UIImagePickerControllerDelegate>
+
+- (IBAction)uploadFile:(UIBarButtonItem *)sender;
 
 @end

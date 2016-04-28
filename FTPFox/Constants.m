@@ -22,6 +22,8 @@ NSString *const  kFileListArrayKey = @"FileListArrayKey";
 NSString *const  kFileListingErrorKey = @"FileListingErrorKey";
 
 NSString *const  kLoginErrorKey = @"LoginErrorKey";
+NSString *const  kDownloadErrorKey = @"DownloadErrorKey";
+NSString *const  kUploadErrorKey = @"UploadErrorKey";
 
 NSString *const  kFilePathKey = @"FilePathKey";
 

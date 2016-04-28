@@ -15,6 +15,7 @@
     
     completionGetList getListCallBack;
     completionDownloadFile downloadFileCallBack;
+    completionUploadFile uploadFileCallBack;
 }
 
 @property (nonatomic, strong) GRRequestsManager *requestsManager;
@@ -160,6 +161,47 @@
     return request;
 }
 
+- (id<GRRequestProtocol>)uploadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionUploadFile) callback {
+    NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
+    NSURLProtectionSpace *protectionSpace = [Utilities protectionSpaceForHost:hostName];
+    NSDictionary *credDic = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:protectionSpace];
+    NSArray *userNameArray = [credDic allKeys];
+    NSURLCredential *cred = [credDic objectForKey:[userNameArray objectAtIndex:0]];
+    
+    self.hostname = [protectionSpace host];
+    self.username = [cred user];
+    self.password = [cred password];
+    
+    NSNumber *savePassObj = [userInfo objectForKey:kSavePasswordEnabledKey];
+    
+    if(savePassObj)
+    {
+        self.isSavePasswordEnabled = [savePassObj boolValue];
+    }
+    else
+    {
+        self.isSavePasswordEnabled = YES;
+    }
+    
+    [self setupRequestManager];
+    
+    NSString *localFilePath = [userInfo valueForKey:kFilePathKey];
+    NSString *remotePath = hostName;
+    
+    if (nil != hostName) {
+        hostName = [NSString stringWithFormat:@"ftp://%@/%@", hostName, [localFilePath lastPathComponent]];
+    }
+    
+    id<GRRequestProtocol> request = [self.requestsManager addRequestForUploadFileAtLocalPath:remotePath toRemotePath:localFilePath];
+    [self.requestsManager startProcessingRequests];
+    
+    
+    uploadFileCallBack = callback;
+    
+    return request;
+}
+
+
 #pragma mark - GRRequestsManagerDelegate
 
 - (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didScheduleRequest:(id<GRRequestProtocol>)request {
@@ -213,6 +255,9 @@
         downloadFileCallBack(errorDic);
     }
 
+    if (nil != uploadFileCallBack) {
+        uploadFileCallBack(errorDic);
+    }
     
 //    [self.delegate loginCompletedWithInfo:errorDic];
 }
@@ -231,6 +276,7 @@
 
 - (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteUploadRequest:(id<GRDataExchangeRequestProtocol>)request {
     NSLog(@"requestsManager:didCompleteUploadRequest:");
+    uploadFileCallBack(nil);
 }
 
 - (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteDownloadRequest:(id<GRDataExchangeRequestProtocol>)request {
@@ -240,6 +286,12 @@
 
 - (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didFailWritingFileAtPath:(NSString *)path forRequest:(id<GRDataExchangeRequestProtocol>)request error:(NSError *)error {
     NSLog(@"requestsManager:didFailWritingFileAtPath:forRequest:error: \n %@", error);
+    
+    NSDictionary *errorDic = [NSDictionary dictionaryWithObjectsAndKeys:error, kLoginErrorKey, nil];
+    
+    if (nil != uploadFileCallBack) {
+        uploadFileCallBack(errorDic);
+    }
 }
 
 @end

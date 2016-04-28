@@ -8,8 +8,21 @@
 
 #import "UploadListViewController.h"
 #import "Constants.h"
+#import "FTPRequestController.h"
+#import "MBProgressHUD.h"
+#import "Utilities.h"
 
 @interface UploadListViewController ()
+
+@property(nonatomic, strong) NSDictionary *imageInfoToUpload;
+@property (nonatomic, weak) id<GRRequestProtocol> request;
+@property (nonatomic, strong) MBProgressHUD *hudAnimator;
+@property (nonatomic, strong) NSMutableArray *uploadingImagesArray;
+@property (weak, nonatomic) IBOutlet UITableView *uploadsTableView;
+
+- (void)showActivity;
+- (void)hideActivity;
+- (void)startUpload;
 
 @end
 
@@ -17,6 +30,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.uploadingImagesArray = [NSMutableArray array];
     
     NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
     if (nil == hostName) {
@@ -38,61 +53,116 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 0;
+    return self.uploadingImagesArray.count;
 }
 
-/*
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
+    NSString *uploadReuseIdentifier = @"uploadReuseIdentifier";
     
-    // Configure the cell...
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:uploadReuseIdentifier];
+    
+    if (nil == cell) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:uploadReuseIdentifier];
+    }
+    
+    NSDictionary *imageInfo = [self.uploadingImagesArray objectAtIndex:indexPath.row];
+    UIImage *imageToUpload = [imageInfo objectForKey:UIImagePickerControllerOriginalImage];
+    NSURL *imageURLToUpload = [imageInfo objectForKey:UIImagePickerControllerMediaURL];
+
+    cell.textLabel.text = [imageURLToUpload lastPathComponent];
+    cell.imageView.image = imageToUpload;
+    cell.detailTextLabel.text = [imageURLToUpload absoluteString];
+    [cell.detailTextLabel setLineBreakMode:NSLineBreakByTruncatingMiddle];
+    
+    UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
+    progressView.frame = CGRectMake(0, 34, self.view.frame.size.width, 10);
+    progressView.tag = 101;
+    progressView.progress = 0.33;
+    [cell.contentView addSubview:progressView];
     
     return cell;
 }
-*/
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+
+#pragma mark -
+#pragma mark UIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
+    
+    if (nil != info) {
+        self.imageInfoToUpload = info;
+    }
+    
+    [picker dismissViewControllerAnimated:YES completion:^{
+        if (nil != self.imageInfoToUpload) {
+            [self startUpload];
+        }
+    }];
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+- (IBAction)uploadFile:(UIBarButtonItem *)sender {
+    UIImagePickerController *pickerController = [[UIImagePickerController alloc] init];
+    pickerController.delegate = self;
+    [self presentViewController:pickerController animated:YES completion:nil];
 }
-*/
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+- (void)startUpload {
+    [self performSelectorOnMainThread:@selector(showActivity) withObject:nil waitUntilDone:NO];
+    
+    UIImage *imageToUpload = [self.imageInfoToUpload objectForKey:UIImagePickerControllerOriginalImage];
+    NSURL *imageURLToUpload = [self.imageInfoToUpload objectForKey:UIImagePickerControllerMediaURL];
+    
+    [self.uploadingImagesArray  addObject:self.imageInfoToUpload];
+    [self.uploadsTableView reloadData];
+
+    FTPRequestController *requestController = [[FTPRequestController alloc] init];
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys: [imageURLToUpload absoluteString], kFilePathKey, nil];
+    
+    self.request = [requestController uploadFileWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
+        [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
+        
+        if (nil != complInfo) {
+            NSError *error = [complInfo valueForKey:kFileListingErrorKey];
+            
+            if (nil == error) {
+                error = [complInfo valueForKey:kLoginErrorKey];
+            }
+            
+            if (nil != error) {
+                NSDictionary *userInfo = [error userInfo];
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                [alert show];
+            }
+            else {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Upload completed" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                [alert show];
+                
+                [self.uploadingImagesArray removeObject:self.imageInfoToUpload];
+                [self.uploadsTableView reloadData];
+            }
+        }
+    }];
 }
-*/
 
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
+- (void)showActivity {
+    self.hudAnimator = nil;
+    self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+    self.hudAnimator.mode = MBProgressHUDModeIndeterminate;
+    self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
+    [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
+    [self.hudAnimator.button addTarget:self action:@selector(cancelLoadList:) forControlEvents:UIControlEventTouchUpInside];
 }
-*/
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+- (void)hideActivity {
+    if (self.hudAnimator) {
+        [self.hudAnimator hideAnimated:YES];
+    }
 }
-*/
+
+- (void)cancelLoadList:(UIButton *) sender {
+    [self.request cancelRequest];
+    [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
+}
+
 
 @end

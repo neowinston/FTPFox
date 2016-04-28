@@ -11,10 +11,13 @@
 
 typedef void(^completionGetList)(NSDictionary *);
 typedef void(^completionDownloadFile)(NSDictionary *);
+typedef void(^completionUploadFile)(NSDictionary *);
+
 
 @interface FTPRequestController : NSObject
 
 - (id<GRRequestProtocol>)getFileListWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionGetList) callback;
-- (id<GRRequestProtocol>)downloadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionGetList) callback;
+- (id<GRRequestProtocol>)downloadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionDownloadFile) callback;
+- (id<GRRequestProtocol>)uploadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionUploadFile) callback;
 
 @end

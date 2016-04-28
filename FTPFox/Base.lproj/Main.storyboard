@@ -159,7 +159,13 @@
                                     <constraint firstAttribute="height" constant="44" id="buM-Tc-gkC"/>
                                 </constraints>
                                 <items>
-                                    <navigationItem title="Uploads" id="gQ1-Lr-o95"/>
+                                    <navigationItem title="Uploads" id="gQ1-Lr-o95">
+                                        <barButtonItem key="rightBarButtonItem" title="Upload" id="c0Q-2D-yBU">
+                                            <connections>
+                                                <action selector="uploadFile:" destination="Itw-ak-I2z" id="jxh-bO-HeT"/>
+                                            </connections>
+                                        </barButtonItem>
+                                    </navigationItem>
                                 </items>
                             </navigationBar>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="YWQ-Xd-DhC">
@@ -185,10 +191,13 @@
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Uploads" image="uploads.png" id="ufN-D4-VMv"/>
+                    <connections>
+                        <outlet property="uploadsTableView" destination="YWQ-Xd-DhC" id="fij-gB-NYy"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e13-Y7-1fn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-901" y="-602"/>
+            <point key="canvasLocation" x="-1073" y="-567"/>
         </scene>
         <!--Files-->
         <scene sceneID="uzi-T3-aqx">
