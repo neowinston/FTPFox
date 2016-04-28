@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <QuickLook/QuickLook.h>
 
-@interface FilePreviewViewController : UIViewController
+@interface FilePreviewViewController : UIViewController  {
+    
+}
+
+@property(nonatomic, strong) NSString *filePath;
 
 @end

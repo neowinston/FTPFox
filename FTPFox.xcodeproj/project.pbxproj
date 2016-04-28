@@ -37,6 +37,9 @@
 		0DA6FC521CD0DAB80069D9ED /* GRQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DA6FC471CD0DAB80069D9ED /* GRQueue.m */; };
 		0DA6FC531CD0DAB80069D9ED /* GRStreamInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DA6FC491CD0DAB80069D9ED /* GRStreamInfo.m */; };
 		0DA6FC551CD0DAD40069D9ED /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DA6FC541CD0DAD40069D9ED /* CFNetwork.framework */; };
+		0DA6FC591CD1D56D0069D9ED /* FTPRequestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DA6FC581CD1D56D0069D9ED /* FTPRequestController.m */; };
+		0DA6FC5E1CD1EBBD0069D9ED /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DA6FC5D1CD1EBBD0069D9ED /* MBProgressHUD.m */; };
+		0DA6FC641CD1EC540069D9ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DA6FC631CD1EC540069D9ED /* CoreGraphics.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -94,6 +97,12 @@
 		0DA6FC481CD0DAB80069D9ED /* GRStreamInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GRStreamInfo.h; sourceTree = "<group>"; };
 		0DA6FC491CD0DAB80069D9ED /* GRStreamInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GRStreamInfo.m; sourceTree = "<group>"; };
 		0DA6FC541CD0DAD40069D9ED /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
+		0DA6FC571CD1D56D0069D9ED /* FTPRequestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FTPRequestController.h; sourceTree = "<group>"; };
+		0DA6FC581CD1D56D0069D9ED /* FTPRequestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FTPRequestController.m; sourceTree = "<group>"; };
+		0DA6FC5A1CD1EB6E0069D9ED /* FTPFox.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FTPFox.pch; sourceTree = "<group>"; };
+		0DA6FC5C1CD1EBBD0069D9ED /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		0DA6FC5D1CD1EBBD0069D9ED /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		0DA6FC631CD1EC540069D9ED /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				0DA6FC641CD1EC540069D9ED /* CoreGraphics.framework in Frameworks */,
 				0DA6FC551CD0DAD40069D9ED /* CFNetwork.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -138,10 +148,12 @@
 				0DA6F9FF1CD09F380069D9ED /* ServerListViewController.m */,
 				0DA6FA011CD09F600069D9ED /* FilesTableViewController.h */,
 				0DA6FA021CD09F600069D9ED /* FilesTableViewController.m */,
-				0DA6FA041CD09F780069D9ED /* UploadListViewController.h */,
-				0DA6FA051CD09F780069D9ED /* UploadListViewController.m */,
 				0DA6FA071CD09F9D0069D9ED /* FilePreviewViewController.h */,
 				0DA6FA081CD09F9D0069D9ED /* FilePreviewViewController.m */,
+				0DA6FA041CD09F780069D9ED /* UploadListViewController.h */,
+				0DA6FA051CD09F780069D9ED /* UploadListViewController.m */,
+				0DA6FC571CD1D56D0069D9ED /* FTPRequestController.h */,
+				0DA6FC581CD1D56D0069D9ED /* FTPRequestController.m */,
 				0DA6F9ED1CD08BEF0069D9ED /* Main.storyboard */,
 				0DA6F9F01CD08BEF0069D9ED /* Assets.xcassets */,
 				0DA6F9F21CD08BEF0069D9ED /* LaunchScreen.storyboard */,
@@ -154,6 +166,8 @@
 		0DA6F9E41CD08BEF0069D9ED /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0DA6FC5B1CD1EBBD0069D9ED /* MBProgressHUD */,
+				0DA6FC5A1CD1EB6E0069D9ED /* FTPFox.pch */,
 				0DA6FC301CD0DAB80069D9ED /* GoldRaccoon */,
 				0DA6FA1E1CD0AA890069D9ED /* Constants.h */,
 				0DA6FA1F1CD0AA890069D9ED /* Constants.m */,
@@ -235,10 +249,20 @@
 		0DA6FC561CD0DAE70069D9ED /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				0DA6FC631CD1EC540069D9ED /* CoreGraphics.framework */,
 				0DA6FC541CD0DAD40069D9ED /* CFNetwork.framework */,
 			);
 			name = Frameworks;
 			path = FTPFox;
+			sourceTree = "<group>";
+		};
+		0DA6FC5B1CD1EBBD0069D9ED /* MBProgressHUD */ = {
+			isa = PBXGroup;
+			children = (
+				0DA6FC5C1CD1EBBD0069D9ED /* MBProgressHUD.h */,
+				0DA6FC5D1CD1EBBD0069D9ED /* MBProgressHUD.m */,
+			);
+			path = MBProgressHUD;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -332,6 +356,8 @@
 				0DA6FC4E1CD0DAB80069D9ED /* GRListingRequest.m in Sources */,
 				0DA6FA061CD09F780069D9ED /* UploadListViewController.m in Sources */,
 				0DA6FA1D1CD0AA1B0069D9ED /* RootTabBarController.m in Sources */,
+				0DA6FC5E1CD1EBBD0069D9ED /* MBProgressHUD.m in Sources */,
+				0DA6FC591CD1D56D0069D9ED /* FTPRequestController.m in Sources */,
 				0DA6FA031CD09F600069D9ED /* FilesTableViewController.m in Sources */,
 				0DA6FA091CD09F9D0069D9ED /* FilePreviewViewController.m in Sources */,
 				0DA6FC4D1CD0DAB80069D9ED /* GRDownloadRequest.m in Sources */,
@@ -449,7 +475,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = FTPFox/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -465,7 +491,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = FTPFox/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

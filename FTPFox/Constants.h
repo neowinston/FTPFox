@@ -15,12 +15,17 @@
 
 extern NSString *const  kNetworkErrorDomain;
 
-
 extern NSString *const  kCurrentHostKey;
+extern NSString *const  kCurrentUserKey;
+extern NSString *const  kCurrentPasswordKey;
+
+extern NSString *const  kSavePasswordEnabledKey;
+
 
 extern NSString *const  kFileListArrayKey;
 extern NSString *const  kFileListingErrorKey;
 extern NSString *const  kLoginErrorKey;
 
+extern NSString *const  kFilePathKey;
 
 @end

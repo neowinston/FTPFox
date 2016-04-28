@@ -90,10 +90,10 @@
                             <constraint firstItem="xfB-vb-iYV" firstAttribute="top" secondItem="quk-nz-XFk" secondAttribute="bottom" constant="20" id="LE5-da-QGQ"/>
                             <constraint firstItem="w5T-aY-lTY" firstAttribute="leading" secondItem="f3v-hJ-gpu" secondAttribute="trailing" constant="8" id="O4z-kZ-w8F"/>
                             <constraint firstItem="7e8-Yd-0kn" firstAttribute="leading" secondItem="xfB-vb-iYV" secondAttribute="leading" id="RSH-5S-wPZ"/>
-                            <constraint firstItem="quk-nz-XFk" firstAttribute="trailing" secondItem="vyp-Qi-NSi" secondAttribute="trailingMargin" constant="20" id="dIQ-Bu-NSi"/>
+                            <constraint firstItem="quk-nz-XFk" firstAttribute="trailing" secondItem="vyp-Qi-NSi" secondAttribute="trailingMargin" priority="700" constant="20" id="dIQ-Bu-NSi"/>
                             <constraint firstItem="ETL-5f-8Km" firstAttribute="leading" secondItem="7e8-Yd-0kn" secondAttribute="leading" id="frb-Ea-QrS"/>
                             <constraint firstAttribute="trailingMargin" secondItem="quk-nz-XFk" secondAttribute="trailing" id="gbU-DO-VEN"/>
-                            <constraint firstItem="quk-nz-XFk" firstAttribute="leading" secondItem="vyp-Qi-NSi" secondAttribute="leadingMargin" constant="-20" id="jp8-1F-M3F"/>
+                            <constraint firstItem="quk-nz-XFk" firstAttribute="leading" secondItem="vyp-Qi-NSi" secondAttribute="leadingMargin" priority="700" constant="-20" id="jp8-1F-M3F"/>
                             <constraint firstItem="ETL-5f-8Km" firstAttribute="top" secondItem="7e8-Yd-0kn" secondAttribute="bottom" constant="20" id="lJt-cz-01R"/>
                             <constraint firstItem="7e8-Yd-0kn" firstAttribute="trailing" secondItem="xfB-vb-iYV" secondAttribute="trailing" id="nPr-mo-HxT"/>
                             <constraint firstItem="w5T-aY-lTY" firstAttribute="centerY" secondItem="f3v-hJ-gpu" secondAttribute="centerY" id="rvT-CB-gbo"/>
@@ -111,7 +111,9 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="loginButton" destination="82C-xX-zAd" id="ghb-uL-dsQ"/>
                         <outlet property="passwordTextField" destination="ETL-5f-8Km" id="BQg-Gh-0LS"/>
+                        <outlet property="savePasswordSwitch" destination="f3v-hJ-gpu" id="N1F-w5-ZeI"/>
                         <outlet property="serverTextField" destination="xfB-vb-iYV" id="YPG-Fa-76z"/>
                         <outlet property="userNameTextField" destination="7e8-Yd-0kn" id="PUR-6H-ivX"/>
                     </connections>
@@ -186,7 +188,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e13-Y7-1fn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-677" y="-643"/>
+            <point key="canvasLocation" x="-901" y="-602"/>
         </scene>
         <!--Files-->
         <scene sceneID="uzi-T3-aqx">
@@ -273,7 +275,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1F4-FU-rvY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1440" y="-591"/>
+            <point key="canvasLocation" x="-1149" y="-602"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="5sa-g9-4zZ">

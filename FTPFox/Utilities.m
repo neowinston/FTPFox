@@ -39,6 +39,11 @@
     return retValue;
 }
 
++ (NSString *)documentsDirectoryPath {
+    return [[Utilities documentsDirectory] absoluteString];
+}
+
+
 + (NSURL *)documentsDirectory {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }

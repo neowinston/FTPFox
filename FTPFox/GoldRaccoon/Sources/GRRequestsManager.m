@@ -7,8 +7,9 @@
 //  Copyright 2013 Alberto De Bortoli. All rights reserved.
 //
 
-#import "GRRequestsManager.h"
+#import <UIKit/UIKit.h>
 
+#import "GRRequestsManager.h"
 #import "GRListingRequest.h"
 #import "GRCreateDirectoryRequest.h"
 #import "GRUploadRequest.h"
@@ -83,6 +84,8 @@
 
 - (void)startProcessingRequests
 {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+
     if (_isRunning == NO) {
         _isRunning = YES;
         [self _processNextRequest];
@@ -144,6 +147,8 @@
 
 - (void)requestCompleted:(GRRequest *)request
 {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+    
     // listing request
     if ([request isKindOfClass:[GRListingRequest class]]) {
         NSMutableArray *listing = [NSMutableArray array];
@@ -207,6 +212,8 @@
 
 - (void)requestFailed:(GRRequest *)request
 {
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+
     if ([self.delegate respondsToSelector:@selector(requestsManager:didFailRequest:withError:)]) {
         NSError *error = [NSError errorWithDomain:@"com.albertodebortoli.goldraccoon" code:-1000 userInfo:@{@"message": request.error.message}];
         [self.delegate requestsManager:self didFailRequest:request withError:error];

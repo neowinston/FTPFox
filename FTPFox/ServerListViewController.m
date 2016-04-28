@@ -11,6 +11,8 @@
 #import "GRRequestProtocol.h"
 #import "LoginViewController.h"
 #import "GRRequestsManager.h"
+#import "MBProgressHUD.h"
+#import "FTPRequestController.h"
 
 @interface ServerListViewController () {
     
@@ -19,6 +21,11 @@
 @property (nonatomic, strong) GRRequestsManager *requestsManager;
 @property (nonatomic, strong) NSArray *serverListArray;
 @property (weak, nonatomic) IBOutlet UITableView *serverListTableView;
+@property (nonatomic, strong) MBProgressHUD *hudAnimator;
+@property (nonatomic, weak) id<GRRequestProtocol> request;
+
+- (void)showActivity;
+- (void)hideActivity;
 
 @end
 
@@ -66,10 +73,8 @@
 //    }
 }
 
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
@@ -118,12 +123,28 @@
 
     if ([cred hasPassword])
     {
-        self.requestsManager = [[GRRequestsManager alloc] initWithHostname:[protectionSpace host]
-                                                                      user:[cred user]
-                                                                  password:[cred password]];
-        self.requestsManager.delegate = self;
-        [self.requestsManager addRequestForListDirectoryAtPath:@"/"];
-        [self.requestsManager startProcessingRequests];
+        [self performSelectorOnMainThread:@selector(showActivity) withObject:nil waitUntilDone:NO];
+        
+        FTPRequestController *requestController = [[FTPRequestController alloc] init];
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[protectionSpace host], kCurrentHostKey,  [cred user], kCurrentUserKey, [cred password], kCurrentPasswordKey, nil];
+        
+        self.request = [requestController getFileListWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
+            [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
+            
+            if (nil != complInfo) {
+                NSError *error = [complInfo valueForKey:kFileListingErrorKey];
+                
+                if (nil == error) {
+                    error = [complInfo valueForKey:kLoginErrorKey];
+                }
+                
+                if (nil != error) {
+                    NSDictionary *userInfo = [error userInfo];
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                    [alert show];
+                }
+            }
+        }];
     }
     else
     {
@@ -135,34 +156,26 @@
     }
 }
 
-#pragma mark - GRRequestsManagerDelegate
+#pragma mark - Private Methods
 
-- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didScheduleRequest:(id<GRRequestProtocol>)request {
-    NSLog(@"requestsManager:didScheduleRequest:");
+- (void)showActivity {
+    self.hudAnimator = nil;
+    self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.tabBarController.view animated:YES];
+    self.hudAnimator.mode = MBProgressHUDModeIndeterminate;
+    self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
+    [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
+    [self.hudAnimator.button addTarget:self action:@selector(cancelLoadList:) forControlEvents:UIControlEventTouchUpInside];
 }
 
-- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteListingRequest:(id<GRRequestProtocol>)request listing:(NSArray *)listing {
-    NSLog(@"requestsManager:didCompleteListingRequest:listing: \n%@", listing);
+- (void)hideActivity {
+    if (self.hudAnimator) {
+        [self.hudAnimator hideAnimated:YES];
+    }
+}
+
+- (void)cancelLoadList:(UIButton *) sender {
+    [self.request cancelRequest];
+    [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
+}
     
-    if (nil != listing)
-    {
-        [(UITabBarController *)self.parentViewController setSelectedIndex:1];
-
-        NSString *hostUrl = [request hostString];
-        [[NSUserDefaults standardUserDefaults] setObject:hostUrl forKey:kCurrentHostKey];
-        [[NSUserDefaults standardUserDefaults] synchronize];
-        [self.delegate loginCompletedWithInfo:[NSDictionary dictionaryWithObjectsAndKeys:listing, kFileListArrayKey, nil]];
-    }
-    else
-    {
-        NSError *error = [NSError errorWithDomain:kNetworkErrorDomain code:FileListingErrorCode userInfo:[NSDictionary dictionaryWithObjectsAndKeys:@"Error in file listing", @"message", nil]];
-        [self.delegate loginCompletedWithInfo:[NSDictionary dictionaryWithObjectsAndKeys:error, kFileListingErrorKey, nil]];
-    }
-}
-
-- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didFailRequest:(id<GRRequestProtocol>)request withError:(NSError *)error {
-    NSLog(@"requestsManager:didFailRequest:withError: \n %@", error);
-    [self.delegate loginCompletedWithInfo:[NSDictionary dictionaryWithObjectsAndKeys:error, kLoginErrorKey, nil]];
-}
-
 @end

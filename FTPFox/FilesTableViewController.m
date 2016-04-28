@@ -8,6 +8,7 @@
 
 #import "FilesTableViewController.h"
 #import "Constants.h"
+#import "FilePreviewViewController.h"
 
 @interface FilesTableViewController ()
 
@@ -66,9 +67,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-
     
 //    NSURLProtectionSpace *protectionSpace = [self.fileListArray objectAtIndex:indexPath.row];
 //    
@@ -94,6 +93,32 @@
 //        }];
 //    }
 }
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    UITableViewCell *slectedCell = nil;
+    NSIndexPath *indexPath = nil;
+    
+    if ([sender isKindOfClass:[UITableViewCell class]]) {
+        slectedCell = (UITableViewCell *)sender;
+        indexPath = [self.tableView indexPathForCell:slectedCell];
+    }
+    
+    UIViewController *vc = [segue destinationViewController];
+    FilePreviewViewController *filePreviewViewController = nil;
+    
+    if ([vc isKindOfClass:[FilePreviewViewController class]])
+    {
+        filePreviewViewController = (FilePreviewViewController *)vc;
+        filePreviewViewController.filePath = @"";
+        
+        NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
+        if (nil != hostName) {
+            filePreviewViewController.filePath = [NSString stringWithFormat:@"ftp://%@/%@", hostName, [self.fileListArray objectAtIndex:indexPath.row]];
+        }
+    }
+}
+
 
 
 - (void)loginCompletedWithInfo:(NSDictionary *) userInfo {

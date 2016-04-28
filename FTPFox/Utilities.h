@@ -14,6 +14,7 @@
 
 + (BOOL)isModal:(UIViewController *) vc;
 + (NSURL *)documentsDirectory;
++ (NSString *)documentsDirectoryPath;
 + (NSURLProtectionSpace *)protectionSpaceForHost:(NSString *) string;
 
 @end
