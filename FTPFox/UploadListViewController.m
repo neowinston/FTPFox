@@ -17,6 +17,8 @@
 @property(nonatomic, strong) NSDictionary *imageInfoToUpload;
 @property (nonatomic, weak) id<GRRequestProtocol> request;
 @property (nonatomic, strong) MBProgressHUD *hudAnimator;
+@property (nonatomic, strong) FTPRequestController *requestController;
+
 @property (nonatomic, strong) NSMutableArray *uploadingImagesArray;
 @property (weak, nonatomic) IBOutlet UITableView *uploadsTableView;
 
@@ -67,11 +69,11 @@
     
     NSDictionary *imageInfo = [self.uploadingImagesArray objectAtIndex:indexPath.row];
     UIImage *imageToUpload = [imageInfo objectForKey:UIImagePickerControllerOriginalImage];
-    NSURL *imageURLToUpload = [imageInfo objectForKey:UIImagePickerControllerMediaURL];
+    NSString *filePath = [NSString stringWithFormat:@"%@/%@", [Utilities documentsDirectoryPath], @"temp.png"];
 
-    cell.textLabel.text = [imageURLToUpload lastPathComponent];
+    cell.textLabel.text = [filePath lastPathComponent];
     cell.imageView.image = imageToUpload;
-    cell.detailTextLabel.text = [imageURLToUpload absoluteString];
+    cell.detailTextLabel.text = filePath;
     [cell.detailTextLabel setLineBreakMode:NSLineBreakByTruncatingMiddle];
     
     UIProgressView *progressView = [[UIProgressView alloc] initWithProgressViewStyle:UIProgressViewStyleDefault];
@@ -106,47 +108,66 @@
     [self presentViewController:pickerController animated:YES completion:nil];
 }
 
+- (NSString *)documentsPathForFileName:(NSString *)name {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory,NSUserDomainMask, YES);
+    NSString *documentsPath = [paths objectAtIndex:0];
+    
+    return [documentsPath stringByAppendingPathComponent:name];
+}
+
 - (void)startUpload {
+    
     [self performSelectorOnMainThread:@selector(showActivity) withObject:nil waitUntilDone:NO];
     
     UIImage *imageToUpload = [self.imageInfoToUpload objectForKey:UIImagePickerControllerOriginalImage];
-    NSURL *imageURLToUpload = [self.imageInfoToUpload objectForKey:UIImagePickerControllerMediaURL];
+    NSData *imageData = UIImagePNGRepresentation(imageToUpload);
     
-    [self.uploadingImagesArray  addObject:self.imageInfoToUpload];
-    [self.uploadsTableView reloadData];
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [paths objectAtIndex:0]; //Get the docs directory
+    NSString *filePath = [documentsPath stringByAppendingPathComponent:@"image.png"]; //Add the file name
 
-    FTPRequestController *requestController = [[FTPRequestController alloc] init];
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys: [imageURLToUpload absoluteString], kFilePathKey, nil];
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
     
-    self.request = [requestController uploadFileWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
-        [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
+    BOOL created = [imageData writeToFile:filePath atomically:YES];
+    
+    if (created) {
         
-        if (nil != complInfo) {
-            NSError *error = [complInfo valueForKey:kFileListingErrorKey];
+        [self.uploadingImagesArray  addObject:self.imageInfoToUpload];
+        [self.uploadsTableView reloadData];
+        
+        self.requestController = [[FTPRequestController alloc] init];
+        NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys: filePath, kFilePathKey, nil];
+        
+        self.request = [self.requestController uploadFileWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
+            [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
             
-            if (nil == error) {
-                error = [complInfo valueForKey:kLoginErrorKey];
-            }
-            
-            if (nil != error) {
-                NSDictionary *userInfo = [error userInfo];
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                [alert show];
-            }
-            else {
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Upload completed" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                [alert show];
+            if (nil != complInfo) {
+                NSError *error = [complInfo valueForKey:kFileListingErrorKey];
                 
+                if (nil == error) {
+                    error = [complInfo valueForKey:kLoginErrorKey];
+                }
+                
+                if (nil != error) {
+                    NSDictionary *userInfo = [error userInfo];
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                    [alert show];
+                }
+                else {
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Alert" message:@"Upload completed" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                    [alert show];
+                }
+
                 [self.uploadingImagesArray removeObject:self.imageInfoToUpload];
                 [self.uploadsTableView reloadData];
             }
-        }
-    }];
+        }];
+    }
 }
 
 - (void)showActivity {
     self.hudAnimator = nil;
-    self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+    self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     self.hudAnimator.mode = MBProgressHUDModeIndeterminate;
     self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
     [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
@@ -163,6 +184,5 @@
     [self.request cancelRequest];
     [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
 }
-
 
 @end

@@ -10,19 +10,20 @@
 #import "Constants.h"
 #import "GRRequestProtocol.h"
 #import "LoginViewController.h"
-#import "GRRequestsManager.h"
 #import "MBProgressHUD.h"
 #import "FTPRequestController.h"
+#import "FilesTableViewController.h"
 
 @interface ServerListViewController () {
     
 }
 
-@property (nonatomic, strong) GRRequestsManager *requestsManager;
 @property (nonatomic, strong) NSArray *serverListArray;
 @property (weak, nonatomic) IBOutlet UITableView *serverListTableView;
 @property (nonatomic, strong) MBProgressHUD *hudAnimator;
 @property (nonatomic, weak) id<GRRequestProtocol> request;
+@property (nonatomic, strong) FTPRequestController *requestController;
+
 
 - (void)showActivity;
 - (void)hideActivity;
@@ -125,10 +126,10 @@
     {
         [self performSelectorOnMainThread:@selector(showActivity) withObject:nil waitUntilDone:NO];
         
-        FTPRequestController *requestController = [[FTPRequestController alloc] init];
+        self.requestController = [[FTPRequestController alloc] init];
         NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[protectionSpace host], kCurrentHostKey,  [cred user], kCurrentUserKey, [cred password], kCurrentPasswordKey, nil];
         
-        self.request = [requestController getFileListWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
+        self.request = [self.requestController getFileListWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
             [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
             
             if (nil != complInfo) {
@@ -143,6 +144,14 @@
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
                     [alert show];
                 }
+                else
+                {
+                    [self performSelectorOnMainThread:@selector(switchTab) withObject:nil waitUntilDone:NO];
+                    UITabBarController *tabBarCtlr = (UITabBarController *)self.parentViewController;
+                    UINavigationController *navController = [[tabBarCtlr viewControllers] objectAtIndex:1];
+                    FilesTableViewController *filesVC = [[navController viewControllers] objectAtIndex:0];
+                    [filesVC loginCompletedWithInfo:complInfo];
+                }
             }
         }];
     }
@@ -154,6 +163,11 @@
         [self presentViewController:loginViewController animated:YES completion:^{
         }];
     }
+}
+
+- (void)switchTab {
+    UITabBarController *tabBarCtlr = (UITabBarController *)self.parentViewController;
+    [tabBarCtlr setSelectedIndex:1];
 }
 
 #pragma mark - Private Methods

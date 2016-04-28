@@ -14,7 +14,9 @@ typedef void(^completionDownloadFile)(NSDictionary *);
 typedef void(^completionUploadFile)(NSDictionary *);
 
 
-@interface FTPRequestController : NSObject
+@interface FTPRequestController : NSObject  {
+    
+}
 
 - (id<GRRequestProtocol>)getFileListWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionGetList) callback;
 - (id<GRRequestProtocol>)downloadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionDownloadFile) callback;

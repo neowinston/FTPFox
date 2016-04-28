@@ -7,19 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GRRequestsManager.h"
 
-@protocol LoginViewControllerDelegate <NSObject>
-
-- (void)loginCompletedWithInfo:(NSDictionary *) userInfo;
-
-@end
-
-@interface LoginViewController : UIViewController <GRRequestsManagerDelegate> {
+@interface LoginViewController : UIViewController  {
     
 }
 
-@property (nonatomic, weak) id<LoginViewControllerDelegate> delegate;
 @property (nonatomic, strong) NSURLProtectionSpace *selectedSpace;
 
 @end

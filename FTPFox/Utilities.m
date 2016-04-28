@@ -69,7 +69,12 @@
             protocol = @"ftp";
         }
         
-        protectionSpace = [[NSURLProtectionSpace alloc] initWithHost:[url host] port:port protocol:protocol realm:@"Protected Area" authenticationMethod:NSURLAuthenticationMethodHTTPBasic];
+        NSString *host = [url host];
+        if (nil == host) {
+            host = [url absoluteString];
+        }
+        
+        protectionSpace = [[NSURLProtectionSpace alloc] initWithHost:host port:port protocol:protocol realm:@"Protected Area" authenticationMethod:NSURLAuthenticationMethodHTTPBasic];
     }
     
     return protectionSpace;

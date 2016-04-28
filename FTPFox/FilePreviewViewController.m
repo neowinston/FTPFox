@@ -17,6 +17,7 @@
 @property (nonatomic, weak) id<GRRequestProtocol> request;
 @property (nonatomic, strong) MBProgressHUD *hudAnimator;
 @property (nonatomic, strong) UIWebView *contentViewer;
+@property (nonatomic, strong) FTPRequestController *requestController;
 
 - (void)showActivity;
 - (void)hideActivity;
@@ -50,10 +51,10 @@
 - (void)showFilePreview {
     [self performSelectorOnMainThread:@selector(showActivity) withObject:nil waitUntilDone:NO];
     
-    FTPRequestController *requestController = [[FTPRequestController alloc] init];
+    self.requestController = [[FTPRequestController alloc] init];
     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.filePath, kFilePathKey, nil];
 
-    self.request = [requestController downloadFileWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
+    self.request = [self.requestController downloadFileWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
         [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
         
         if (nil != complInfo) {

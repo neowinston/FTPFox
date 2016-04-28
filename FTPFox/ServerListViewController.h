@@ -7,18 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "GRRequestsManager.h"
 
-
-@protocol ServerListViewControllerDelegate <NSObject>
-
-- (void)loginCompletedWithInfo:(NSDictionary *) userInfo;
-
-@end
-
-
-@interface ServerListViewController : UIViewController <GRRequestsManagerDelegate>
-
-@property (nonatomic, weak) id<ServerListViewControllerDelegate> delegate;
+@interface ServerListViewController : UIViewController
 
 @end

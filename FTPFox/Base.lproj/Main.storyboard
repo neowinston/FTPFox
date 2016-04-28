@@ -215,6 +215,9 @@
                                     <rect key="frame" x="0.0" y="0.0" width="600" height="43"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
+                                <connections>
+                                    <segue destination="HZg-Ga-EN6" kind="show" id="R9s-AP-sSt"/>
+                                </connections>
                             </tableViewCell>
                         </prototypes>
                         <connections>
@@ -226,7 +229,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fSX-41-QuV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1180" y="679"/>
+            <point key="canvasLocation" x="-1120" y="571"/>
         </scene>
         <!--Servers-->
         <scene sceneID="isc-gv-36W">
@@ -286,10 +289,10 @@
             </objects>
             <point key="canvasLocation" x="-1149" y="-602"/>
         </scene>
-        <!--View Controller-->
+        <!--File Preview View Controller-->
         <scene sceneID="5sa-g9-4zZ">
             <objects>
-                <viewController id="HZg-Ga-EN6" sceneMemberID="viewController">
+                <viewController id="HZg-Ga-EN6" customClass="FilePreviewViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Bt4-0E-2tQ"/>
                         <viewControllerLayoutGuide type="bottom" id="SfH-Cx-NPG"/>
@@ -302,7 +305,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e7a-ou-LS5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-739" y="1223"/>
+            <point key="canvasLocation" x="-773" y="616"/>
         </scene>
         <!--Files-->
         <scene sceneID="5ZO-SR-bFj">

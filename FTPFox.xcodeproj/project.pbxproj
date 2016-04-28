@@ -40,6 +40,7 @@
 		0DA6FC591CD1D56D0069D9ED /* FTPRequestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DA6FC581CD1D56D0069D9ED /* FTPRequestController.m */; };
 		0DA6FC5E1CD1EBBD0069D9ED /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DA6FC5D1CD1EBBD0069D9ED /* MBProgressHUD.m */; };
 		0DA6FC641CD1EC540069D9ED /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0DA6FC631CD1EC540069D9ED /* CoreGraphics.framework */; };
+		0DA6FD0E1CD299040069D9ED /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DA6FD0D1CD299040069D9ED /* KeychainItemWrapper.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -103,6 +104,8 @@
 		0DA6FC5C1CD1EBBD0069D9ED /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
 		0DA6FC5D1CD1EBBD0069D9ED /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
 		0DA6FC631CD1EC540069D9ED /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		0DA6FD0C1CD299040069D9ED /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
+		0DA6FD0D1CD299040069D9ED /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,6 +169,8 @@
 		0DA6F9E41CD08BEF0069D9ED /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				0DA6FD0C1CD299040069D9ED /* KeychainItemWrapper.h */,
+				0DA6FD0D1CD299040069D9ED /* KeychainItemWrapper.m */,
 				0DA6FC5B1CD1EBBD0069D9ED /* MBProgressHUD */,
 				0DA6FC5A1CD1EB6E0069D9ED /* FTPFox.pch */,
 				0DA6FC301CD0DAB80069D9ED /* GoldRaccoon */,
@@ -357,6 +362,7 @@
 				0DA6FA061CD09F780069D9ED /* UploadListViewController.m in Sources */,
 				0DA6FA1D1CD0AA1B0069D9ED /* RootTabBarController.m in Sources */,
 				0DA6FC5E1CD1EBBD0069D9ED /* MBProgressHUD.m in Sources */,
+				0DA6FD0E1CD299040069D9ED /* KeychainItemWrapper.m in Sources */,
 				0DA6FC591CD1D56D0069D9ED /* FTPRequestController.m in Sources */,
 				0DA6FA031CD09F600069D9ED /* FilesTableViewController.m in Sources */,
 				0DA6FA091CD09F9D0069D9ED /* FilePreviewViewController.m in Sources */,
@@ -521,6 +527,7 @@
 				0DA6F9FA1CD08BEF0069D9ED /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

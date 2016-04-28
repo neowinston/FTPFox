@@ -27,14 +27,14 @@
 }
 
 - (void)viewDidLoad {
+    [super viewDidLoad];
+
     NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
-    
     if (nil == hostName) {
         hostName = @"Files";
     }
     
     [self.navigationItem setTitle:hostName];
-    [super viewDidLoad];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -118,8 +118,6 @@
         }
     }
 }
-
-
 
 - (void)loginCompletedWithInfo:(NSDictionary *) userInfo {
     

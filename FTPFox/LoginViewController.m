@@ -12,16 +12,16 @@
 #import "Utilities.h"
 #import "FTPRequestController.h"
 #import "MBProgressHUD.h"
+#import "FilesTableViewController.h"
 
 @interface LoginViewController() {
     
 }
 
-@property (nonatomic, strong) GRRequestsManager *requestsManager;
 @property (nonatomic, assign) BOOL isSavePasswordEnabled;
 @property (nonatomic, weak) id<GRRequestProtocol> request;
 @property (nonatomic, strong) MBProgressHUD *hudAnimator;
-
+@property (nonatomic, strong) FTPRequestController *requestController;
 
 @property (weak, nonatomic) IBOutlet UITextField *serverTextField;
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
@@ -71,10 +71,10 @@
 - (IBAction)loginButtonClicked:(UIButton *)sender {
     [self performSelectorOnMainThread:@selector(showActivity) withObject:nil waitUntilDone:NO];
 
-    FTPRequestController *requestController = [[FTPRequestController alloc] init];
+    self.requestController = [[FTPRequestController alloc] init];
     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:self.serverTextField.text, kCurrentHostKey,  self.userNameTextField.text, kCurrentUserKey, self.passwordTextField.text, kCurrentPasswordKey, [NSNumber numberWithBool:self.isSavePasswordEnabled], kSavePasswordEnabledKey, nil];
     
-    self.request = [requestController getFileListWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
+    self.request = [self.requestController getFileListWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
         [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
         
         if (nil != complInfo) {
@@ -84,18 +84,28 @@
                 error = [complInfo valueForKey:kLoginErrorKey];
             }
             
-            if (nil != error) {
+            if (nil != error)
+            {
                 NSDictionary *userInfo = [error userInfo];
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
                 [alert show];
+            }
+            else
+            {
+                UITabBarController *tabBarCtlr = (UITabBarController *)self.presentingViewController;
+                UINavigationController *navController = [[tabBarCtlr viewControllers] objectAtIndex:1];
+                FilesTableViewController *filesVC = [[navController viewControllers] objectAtIndex:0];
+                [filesVC loginCompletedWithInfo:complInfo];
+                
+                [self dismissViewControllerAnimated:YES completion:^{
+                }];
             }
         }
     }];
 }
 
+
 - (IBAction)cancelButtonClicked:(UIBarButtonItem *)sender {
-    [self dismissViewControllerAnimated:YES completion:^{
-    }];
 }
 
 - (IBAction)savePwdValueChange:(UISwitch *)sender {

@@ -148,11 +148,15 @@
     
     [self setupRequestManager];
 
-    NSString *localFilePath = [[Utilities documentsDirectoryPath] stringByAppendingPathComponent:@"DownloadedFile.txt"];
-    [[NSFileManager defaultManager] removeItemAtPath:localFilePath error:nil];
     NSString *remotePath = [userInfo valueForKey:kFilePathKey];
+
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsPath = [paths objectAtIndex:0]; //Get the docs directory
+    NSString *filePath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"nilesh1883.%@", remotePath.pathExtension]];
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+
     
-    id<GRRequestProtocol> request = [self.requestsManager addRequestForDownloadFileAtRemotePath:remotePath toLocalPath:localFilePath];
+    id<GRRequestProtocol> request = [self.requestsManager addRequestForDownloadFileAtRemotePath:remotePath toLocalPath:filePath];
     [self.requestsManager startProcessingRequests];
     
     
@@ -227,10 +231,7 @@
         [[NSURLCredentialStorage sharedCredentialStorage] setCredential:credential forProtectionSpace:protectionSpace];
         
         NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:listing, kFileListArrayKey, nil];
-        
-        getListCallBack(nil);
-        
-//        [self.delegate loginCompletedWithInfo:[NSDictionary dictionaryWithObjectsAndKeys:listing, kFileListArrayKey, nil]];
+        getListCallBack(dic);
     }
     else
     {
@@ -238,8 +239,6 @@
         
         NSDictionary *errorDic = [NSDictionary dictionaryWithObjectsAndKeys:error, kFileListingErrorKey, nil];
         getListCallBack(errorDic);
-        
-//        [self.delegate loginCompletedWithInfo:errorDic];
     }
 }
 
@@ -258,8 +257,6 @@
     if (nil != uploadFileCallBack) {
         uploadFileCallBack(errorDic);
     }
-    
-//    [self.delegate loginCompletedWithInfo:errorDic];
 }
 
 - (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteCreateDirectoryRequest:(id<GRRequestProtocol>)request {

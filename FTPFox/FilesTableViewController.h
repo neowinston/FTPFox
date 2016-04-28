@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "ServerListViewController.h"
-#import "LoginViewController.h"
 
-@interface FilesTableViewController : UITableViewController <ServerListViewControllerDelegate, LoginViewControllerDelegate>
+@interface FilesTableViewController : UITableViewController
+
+- (void)loginCompletedWithInfo:(NSDictionary *) userInfo;
 
 @end
