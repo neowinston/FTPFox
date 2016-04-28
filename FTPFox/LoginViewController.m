@@ -104,8 +104,9 @@
     }];
 }
 
-
 - (IBAction)cancelButtonClicked:(UIBarButtonItem *)sender {
+    [self dismissViewControllerAnimated:YES completion:^{
+    }];
 }
 
 - (IBAction)savePwdValueChange:(UISwitch *)sender {

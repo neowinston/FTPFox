@@ -122,7 +122,7 @@
     NSArray *userNameArray = [credDic allKeys];
     NSURLCredential *cred = [credDic objectForKey:[userNameArray objectAtIndex:0]];
 
-    if ([cred hasPassword])
+    if ([cred hasPassword] && (NO == [[cred password] isEqualToString:@""]))
     {
         [self performSelectorOnMainThread:@selector(showActivity) withObject:nil waitUntilDone:NO];
         
