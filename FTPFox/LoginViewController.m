@@ -75,8 +75,6 @@
     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:self.serverTextField.text, kCurrentHostKey,  self.userNameTextField.text, kCurrentUserKey, self.passwordTextField.text, kCurrentPasswordKey, [NSNumber numberWithBool:self.isSavePasswordEnabled], kSavePasswordEnabledKey, nil];
     
     self.request = [self.requestController getFileListWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
-        [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
-        
         if (nil != complInfo) {
             NSError *error = [complInfo valueForKey:kFileListingErrorKey];
             
@@ -86,6 +84,7 @@
             
             if (nil != error)
             {
+                [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
                 NSDictionary *userInfo = [error userInfo];
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
                 [alert show];
@@ -94,6 +93,8 @@
             {
                 if ([complInfo objectForKey:kRequestCompleteAlertKey])
                 {
+                    [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
+                    
                     UITabBarController *tabBarCtlr = (UITabBarController *)self.presentingViewController;
                     [self performSelectorOnMainThread:@selector(switchTab) withObject:nil waitUntilDone:NO];
                     UINavigationController *navController = [[tabBarCtlr viewControllers] objectAtIndex:1];
