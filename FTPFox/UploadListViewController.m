@@ -16,14 +16,11 @@
 
 @property (nonatomic, strong) NSDictionary *imageInfoToUpload;
 @property (nonatomic, strong) NSMutableArray *uploadRequestArray;
-@property (nonatomic, strong) MBProgressHUD *hudAnimator;
 @property (nonatomic, strong) FTPRequestController *requestController;
 
 @property (nonatomic, weak) id<GRDataExchangeRequestProtocol> request;
 @property (nonatomic, weak) IBOutlet UITableView *uploadsTableView;
 
-- (void)showActivity;
-- (void)hideActivity;
 - (void)startUpload;
 - (void)relaodTable;
 - (void)updateProgress:(NSDictionary *) userInfo;
@@ -62,7 +59,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 60;
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return self.uploadRequestArray.count;
@@ -263,30 +259,6 @@
             }
         });
     }
-}
-
-- (void)cancelProgress:(id) sender {
-    [self deleteRequestController:self.requestController];
-}
-
-- (void)showActivity {
-    self.hudAnimator = nil;
-    self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    self.hudAnimator.mode = MBProgressHUDModeDeterminate;
-    self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
-    [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
-    [self.hudAnimator.button addTarget:self action:@selector(cancelLoadList:) forControlEvents:UIControlEventTouchUpInside];
-}
-
-- (void)hideActivity {
-    if (self.hudAnimator) {
-        [self.hudAnimator hideAnimated:YES];
-    }
-}
-
-- (void)cancelLoadList:(UIButton *) sender {
-    [self.request cancelRequest];
-    [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
 }
 
 - (void)relaodTable {
