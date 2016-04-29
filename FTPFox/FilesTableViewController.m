@@ -103,8 +103,10 @@
     }
     else if (nil != [userInfo objectForKey:kFileListArrayKey])
     {
-        self.fileListArray = [userInfo objectForKey:kFileListArrayKey];
-        [self.tableView reloadData];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.fileListArray = [userInfo objectForKey:kFileListArrayKey];
+            [self.tableView reloadData];
+        });
     }
 }
 

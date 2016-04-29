@@ -92,23 +92,29 @@
 }
 
 - (void)updateProgress:(NSNumber *) progress {
-    CGFloat progressValue = [progress floatValue];
-    self.hudAnimator.progress = progressValue;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CGFloat progressValue = [progress floatValue];
+        self.hudAnimator.progress = progressValue;
+    });
 }
 
 - (void)showActivity {
-    self.hudAnimator = nil;
-    self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
-    self.hudAnimator.mode = MBProgressHUDModeDeterminate;
-    self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
-    [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
-    [self.hudAnimator.button addTarget:self action:@selector(cancelLoadList:) forControlEvents:UIControlEventTouchUpInside];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.hudAnimator = nil;
+        self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+        self.hudAnimator.mode = MBProgressHUDModeDeterminate;
+        self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
+        [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
+        [self.hudAnimator.button addTarget:self action:@selector(cancelLoadList:) forControlEvents:UIControlEventTouchUpInside];
+    });
 }
 
 - (void)hideActivity {
-    if (self.hudAnimator) {
-        [self.hudAnimator hideAnimated:YES];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.hudAnimator) {
+            [self.hudAnimator hideAnimated:YES];
+        }
+    });
 }
 
 @end

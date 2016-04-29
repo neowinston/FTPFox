@@ -92,16 +92,32 @@
             }
             else
             {
-                UITabBarController *tabBarCtlr = (UITabBarController *)self.presentingViewController;
-                UINavigationController *navController = [[tabBarCtlr viewControllers] objectAtIndex:1];
-                FilesTableViewController *filesVC = [[navController viewControllers] objectAtIndex:0];
-                [filesVC loginCompletedWithInfo:complInfo];
-                
-                [self dismissViewControllerAnimated:YES completion:^{
-                }];
+                if ([complInfo objectForKey:kRequestCompleteAlertKey])
+                {
+                    UITabBarController *tabBarCtlr = (UITabBarController *)self.presentingViewController;
+                    [self performSelectorOnMainThread:@selector(switchTab) withObject:nil waitUntilDone:NO];
+                    UINavigationController *navController = [[tabBarCtlr viewControllers] objectAtIndex:1];
+                    FilesTableViewController *filesVC = [[navController viewControllers] objectAtIndex:0];
+                    [filesVC loginCompletedWithInfo:complInfo];
+                    
+                    [self dismissViewControllerAnimated:YES completion:^{
+                    }];
+                }
+                else if (nil != [complInfo objectForKey:kRequestCompletePercentKey])
+                {
+                    NSNumber *progress = [complInfo objectForKey:kRequestCompletePercentKey];
+                    if (nil != progress) {
+                        [self performSelectorOnMainThread:@selector(updateProgress:) withObject:progress waitUntilDone:NO];
+                    }
+                }
             }
         }
     }];
+}
+
+- (void)switchTab {
+    UITabBarController *tabBarCtlr = (UITabBarController *)self.presentingViewController;
+    [tabBarCtlr setSelectedIndex:1];
 }
 
 - (IBAction)cancelButtonClicked:(UIBarButtonItem *)sender {
@@ -114,18 +130,29 @@
 }
 
 - (void)showActivity {
-    self.hudAnimator = nil;
-    self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    self.hudAnimator.mode = MBProgressHUDModeIndeterminate;
-    self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
-    [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
-    [self.hudAnimator.button addTarget:self action:@selector(cancelLoadList:) forControlEvents:UIControlEventTouchUpInside];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.hudAnimator = nil;
+        self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        self.hudAnimator.mode = MBProgressHUDModeDeterminate;
+        self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
+        [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
+        [self.hudAnimator.button addTarget:self action:@selector(cancelLoadList:) forControlEvents:UIControlEventTouchUpInside];
+    });
 }
 
 - (void)hideActivity {
-    if (self.hudAnimator) {
-        [self.hudAnimator hideAnimated:YES];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.hudAnimator) {
+            [self.hudAnimator hideAnimated:YES];
+        }
+    });
+}
+
+- (void)updateProgress:(NSNumber *) progress {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CGFloat progressValue = [progress floatValue];
+        self.hudAnimator.progress = progressValue;
+    });
 }
 
 #pragma mark - UITextField Delegate

@@ -54,25 +54,6 @@
     NSDictionary *credentialsDict = [[NSURLCredentialStorage sharedCredentialStorage] allCredentials];
     self.serverListArray = [[credentialsDict allKeys] mutableCopy];
     [self.serverListTableView reloadData];
-    
-//    if ([credentialsDict count] > 0) {
-//        // the credentialsDict has NSURLProtectionSpace objs as keys and dicts of userName => NSURLCredential
-//        NSEnumerator *protectionSpaceEnumerator = [credentialsDict keyEnumerator];
-//        id urlProtectionSpace;
-//        
-//        // iterate over all NSURLProtectionSpaces
-//        while (urlProtectionSpace = [protectionSpaceEnumerator nextObject]) {
-//            NSEnumerator *userNameEnumerator = [[credentialsDict objectForKey:urlProtectionSpace] keyEnumerator];
-//            id userName;
-//            
-//            // iterate over all usernames for this protectionspace, which are the keys for the actual NSURLCredentials
-//            while (userName = [userNameEnumerator nextObject]) {
-//                NSURLCredential *cred = [[credentialsDict objectForKey:urlProtectionSpace] objectForKey:userName];
-//                NSLog(@"cred to be removed: %@", cred);
-//                [[NSURLCredentialStorage sharedCredentialStorage] removeCredential:cred forProtectionSpace:urlProtectionSpace];
-//            }
-//        }
-//    }
 }
 
 - (void)didReceiveMemoryWarning {
@@ -205,18 +186,22 @@
 #pragma mark - Private Methods
 
 - (void)showActivity {
-    self.hudAnimator = nil;
-    self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.tabBarController.view animated:YES];
-    self.hudAnimator.mode = MBProgressHUDModeDeterminate;
-    self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
-    [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
-    [self.hudAnimator.button addTarget:self action:@selector(cancelLoadList:) forControlEvents:UIControlEventTouchUpInside];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        self.hudAnimator = nil;
+        self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.tabBarController.view animated:YES];
+        self.hudAnimator.mode = MBProgressHUDModeDeterminate;
+        self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
+        [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
+        [self.hudAnimator.button addTarget:self action:@selector(cancelLoadList:) forControlEvents:UIControlEventTouchUpInside];
+    });
 }
 
 - (void)hideActivity {
-    if (self.hudAnimator) {
-        [self.hudAnimator hideAnimated:YES];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (self.hudAnimator) {
+            [self.hudAnimator hideAnimated:YES];
+        }
+    });
 }
 
 - (void)cancelLoadList:(UIButton *) sender {
@@ -225,8 +210,10 @@
 }
 
 - (void)updateProgress:(NSNumber *) progress {
-    CGFloat progressValue = [progress floatValue];
-    self.hudAnimator.progress = progressValue;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        CGFloat progressValue = [progress floatValue];
+        self.hudAnimator.progress = progressValue;
+    });
 }
 
 @end
