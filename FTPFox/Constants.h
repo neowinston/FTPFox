@@ -28,7 +28,13 @@ extern NSString *const  kLoginErrorKey;
 extern NSString *const  kDownloadErrorKey ;
 extern NSString *const  kUploadErrorKey;
 
+extern NSString *const  kRequestCompletePercentKey;
+
+extern NSString *const  kRequestCompleteAlertKey;
 
 extern NSString *const  kFilePathKey;
+
+extern NSString *const  kRequestManagerObjKey;
+
 
 @end

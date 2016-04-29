@@ -28,7 +28,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    [self setSelectedIndex:0];
 }
 
 - (void)viewDidLoad {

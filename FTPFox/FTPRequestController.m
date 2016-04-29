@@ -24,12 +24,12 @@
 @property (nonatomic, strong) NSString *password;
 @property (nonatomic, assign) BOOL isSavePasswordEnabled;
 
-- (IBAction)listingButton:(id)sender;
-- (IBAction)createDirectoryButton:(id)sender;
-- (IBAction)deleteDirectoryButton:(id)sender;
-- (IBAction)deleteFileButton:(id)sender;
-- (IBAction)uploadFileButton:(id)sender;
-- (IBAction)downloadFileButton:(id)sender;
+- (void)listingButton:(id)sender;
+- (void)createDirectoryButton:(id)sender;
+- (void)deleteDirectoryButton:(id)sender;
+- (void)deleteFileButton:(id)sender;
+- (void)uploadFileButton:(id)sender;
+- (void)downloadFileButton:(id)sender;
 
 - (void)setupRequestManager;
 
@@ -37,47 +37,54 @@
 
 @implementation FTPRequestController
 
-- (IBAction)listingButton:(id)sender {
+- (void)listingButton:(id)sender {
     [self setupRequestManager];
     [self.requestsManager addRequestForListDirectoryAtPath:@"/"];
     [self.requestsManager startProcessingRequests];
 }
 
-- (IBAction)createDirectoryButton:(id)sender {
+- (void)createDirectoryButton:(id)sender {
     [self setupRequestManager];
-    [self.requestsManager addRequestForCreateDirectoryAtPath:@"dir/"];
+    [self.requestsManager addRequestForCreateDirectoryAtPath:@"NileshFiles/"];
     [self.requestsManager startProcessingRequests];
 }
 
-- (IBAction)deleteDirectoryButton:(id)sender {
+- (void)deleteDirectoryButton:(id)sender {
     [self setupRequestManager];
     [self.requestsManager addRequestForDeleteDirectoryAtPath:@"dir/"];
     [self.requestsManager startProcessingRequests];
 }
 
-- (IBAction)deleteFileButton:(id)sender {
+- (void)deleteFileButton:(id)sender {
     [self setupRequestManager];
     [self.requestsManager addRequestForDeleteFileAtPath:@"dir/file.txt"];
     [self.requestsManager startProcessingRequests];
 }
 
-- (IBAction)uploadFileButton:(id)sender {
+- (void)uploadFileButton:(id)sender {
     [self setupRequestManager];
     NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"TestFile" ofType:@"txt"];
     [self.requestsManager addRequestForUploadFileAtLocalPath:bundlePath toRemotePath:@"dir/file.txt"];
     [self.requestsManager startProcessingRequests];
 }
 
-- (IBAction)downloadFileButton:(id)sender {
+- (void)downloadFileButton:(id)sender {
     [self setupRequestManager];
-    NSString *documentsDirectoryPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject];
-    NSString *localFilePath = [documentsDirectoryPath stringByAppendingPathComponent:@"DownloadedFile.txt"];
-
+    NSString *localFilePath = [[Utilities documentsDirectoryPath] stringByAppendingPathComponent:@"DownloadedFile.txt"];
     [self.requestsManager addRequestForDownloadFileAtRemotePath:@"dir/file.txt" toLocalPath:localFilePath];
     [self.requestsManager startProcessingRequests];
 }
 
 #pragma mark - Private Methods
+
+-(BOOL)array:(NSArray*)array containsString:(NSString*)name {
+    for(NSString *str in array)
+    {
+        if([name isEqualToString:str])
+            return YES;
+    }
+    return NO;
+}
 
 - (void)setupRequestManager {
     
@@ -123,7 +130,7 @@
     return request;
 }
 
-- (id<GRRequestProtocol>)downloadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionGetList) callback {
+- (id<GRDataExchangeRequestProtocol>)downloadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionGetList) callback {
     
     NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
     NSURLProtectionSpace *protectionSpace = [Utilities protectionSpaceForHost:hostName];
@@ -149,23 +156,18 @@
     [self setupRequestManager];
 
     NSString *remotePath = [userInfo valueForKey:kFilePathKey];
-
-    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
-    NSString *documentsPath = [paths objectAtIndex:0]; //Get the docs directory
-    NSString *filePath = [documentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"nilesh1883.%@", remotePath.pathExtension]];
+    NSString *filePath = [[Utilities documentsDirectoryPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"image.%@", remotePath.pathExtension]];
     [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
 
-    
-    id<GRRequestProtocol> request = [self.requestsManager addRequestForDownloadFileAtRemotePath:remotePath toLocalPath:filePath];
+    id<GRDataExchangeRequestProtocol> request = [self.requestsManager addRequestForDownloadFileAtRemotePath:[remotePath lastPathComponent] toLocalPath:filePath];
     [self.requestsManager startProcessingRequests];
-    
-    
+
     downloadFileCallBack = callback;
-    
+
     return request;
 }
 
-- (id<GRRequestProtocol>)uploadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionUploadFile) callback {
+- (id<GRDataExchangeRequestProtocol>)uploadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionUploadFile) callback {
     NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
     NSURLProtectionSpace *protectionSpace = [Utilities protectionSpaceForHost:hostName];
     NSDictionary *credDic = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:protectionSpace];
@@ -190,17 +192,15 @@
     [self setupRequestManager];
     
     NSString *localFilePath = [userInfo valueForKey:kFilePathKey];
-    NSString *remotePath = hostName;
+    NSString *remotePath = [NSString stringWithFormat:@"/%@", [localFilePath lastPathComponent]];
     
-    if (nil != hostName) {
-        hostName = [NSString stringWithFormat:@"ftp://%@/%@", hostName, [localFilePath lastPathComponent]];
+    id<GRDataExchangeRequestProtocol> request = nil;
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath]) {
+        request = [self.requestsManager addRequestForUploadFileAtLocalPath:localFilePath toRemotePath:remotePath];
+        [self.requestsManager startProcessingRequests];
+        uploadFileCallBack = callback;
     }
-    
-    id<GRRequestProtocol> request = [self.requestsManager addRequestForUploadFileAtLocalPath:remotePath toRemotePath:localFilePath];
-    [self.requestsManager startProcessingRequests];
-    
-    
-    uploadFileCallBack = callback;
     
     return request;
 }
@@ -229,8 +229,8 @@
         
         [[NSURLCredentialStorage sharedCredentialStorage] removeCredential:credential forProtectionSpace:protectionSpace];
         [[NSURLCredentialStorage sharedCredentialStorage] setCredential:credential forProtectionSpace:protectionSpace];
-        
-        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:listing, kFileListArrayKey, nil];
+
+        NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:listing, kFileListArrayKey, @"Listing Completed Successfully", kRequestCompleteAlertKey, nil];
         getListCallBack(dic);
     }
     else
@@ -242,10 +242,50 @@
     }
 }
 
+- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteCreateDirectoryRequest:(id<GRRequestProtocol>)request {
+    NSLog(@"requestsManager:didCompleteCreateDirectoryRequest:");
+}
+
+- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteDeleteRequest:(id<GRRequestProtocol>)request {
+//    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"Delete Completed Successfully", kRequestCompleteAlertKey, nil];
+    NSLog(@"requestsManager:didCompleteDeleteRequest:");
+}
+
+- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteUploadRequest:(id<GRDataExchangeRequestProtocol>)request {
+    NSLog(@"requestsManager:didCompleteUploadRequest:");
+    
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"Upload Completed Successfully", kRequestCompleteAlertKey, self, kRequestManagerObjKey, nil];
+    uploadFileCallBack(dic);
+}
+
+- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteDownloadRequest:(id<GRDataExchangeRequestProtocol>)request {
+    NSLog(@"requestsManager:didCompleteDownloadRequest:");
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"Download Completed Successfully", kRequestCompleteAlertKey, nil];
+    downloadFileCallBack(dic);
+}
+
+- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompletePercent:(float)percent forRequest:(id<GRRequestProtocol>)request {
+    NSLog(@"requestsManager:didCompletePercent:forRequest: %f", percent);
+    
+    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithFloat:percent], kRequestCompletePercentKey, self, kRequestManagerObjKey, nil];
+    
+    if (nil != getListCallBack) {
+        getListCallBack(dic);
+    }
+    
+    if (nil != downloadFileCallBack) {
+        downloadFileCallBack(dic);
+    }
+    
+    if (nil != uploadFileCallBack) {
+        uploadFileCallBack(dic);
+    }
+}
+
 - (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didFailRequest:(id<GRRequestProtocol>)request withError:(NSError *)error {
     NSLog(@"requestsManager:didFailRequest:withError: \n %@", error);
-    NSDictionary *errorDic = [NSDictionary dictionaryWithObjectsAndKeys:error, kLoginErrorKey, nil];
-
+    NSDictionary *errorDic = [NSDictionary dictionaryWithObjectsAndKeys:error, kLoginErrorKey, self, kRequestManagerObjKey, nil];
+    
     if (nil != getListCallBack) {
         getListCallBack(errorDic);
     }
@@ -253,32 +293,10 @@
     if (nil != downloadFileCallBack) {
         downloadFileCallBack(errorDic);
     }
-
+    
     if (nil != uploadFileCallBack) {
         uploadFileCallBack(errorDic);
     }
-}
-
-- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteCreateDirectoryRequest:(id<GRRequestProtocol>)request {
-    NSLog(@"requestsManager:didCompleteCreateDirectoryRequest:");
-}
-
-- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteDeleteRequest:(id<GRRequestProtocol>)request {
-    NSLog(@"requestsManager:didCompleteDeleteRequest:");
-}
-
-- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompletePercent:(float)percent forRequest:(id<GRRequestProtocol>)request {
-    NSLog(@"requestsManager:didCompletePercent:forRequest: %f", percent);
-}
-
-- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteUploadRequest:(id<GRDataExchangeRequestProtocol>)request {
-    NSLog(@"requestsManager:didCompleteUploadRequest:");
-    uploadFileCallBack(nil);
-}
-
-- (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didCompleteDownloadRequest:(id<GRDataExchangeRequestProtocol>)request {
-    NSLog(@"requestsManager:didCompleteDownloadRequest:");
-    downloadFileCallBack(nil);
 }
 
 - (void)requestsManager:(id<GRRequestsManagerProtocol>)requestsManager didFailWritingFileAtPath:(NSString *)path forRequest:(id<GRDataExchangeRequestProtocol>)request error:(NSError *)error {

@@ -12,15 +12,17 @@
 #import "Constants.h"
 #import "Utilities.h"
 
+
 @interface FilePreviewViewController ()
 
-@property (nonatomic, weak) id<GRRequestProtocol> request;
+@property (nonatomic, weak) id<GRDataExchangeRequestProtocol> request;
 @property (nonatomic, strong) MBProgressHUD *hudAnimator;
 @property (nonatomic, strong) UIWebView *contentViewer;
 @property (nonatomic, strong) FTPRequestController *requestController;
 
 - (void)showActivity;
 - (void)hideActivity;
+- (void)updateProgress:(NSNumber *) progress;
 - (void)showFilePreview;
 
 @end
@@ -55,8 +57,6 @@
     NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.filePath, kFilePathKey, nil];
 
     self.request = [self.requestController downloadFileWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
-        [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
-        
         if (nil != complInfo) {
             NSError *error = [complInfo valueForKey:kFileListingErrorKey];
             
@@ -65,23 +65,41 @@
             }
             
             if (nil != error) {
+                [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
                 NSDictionary *userInfo = [error userInfo];
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
                 [alert show];
             }
             else {
-                NSString *localFilePath = [[Utilities documentsDirectoryPath] stringByAppendingPathComponent:@"DownloadedFile.txt"];
-                NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:localFilePath]];
-                [self.contentViewer loadRequest:request];
+                if ([complInfo objectForKey:kRequestCompleteAlertKey])
+                {
+                    [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
+
+                    NSString *localFilePath = [self.request  localFilePath];
+                    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:localFilePath]];
+                    [self.contentViewer loadRequest:request];
+                }
+                else if (nil != [complInfo objectForKey:kRequestCompletePercentKey])
+                {
+                    NSNumber *progress = [complInfo objectForKey:kRequestCompletePercentKey];
+                    if (nil != progress) {
+                        [self performSelectorOnMainThread:@selector(updateProgress:) withObject:progress waitUntilDone:NO];
+                    }
+                }
             }
         }
     }];
 }
 
+- (void)updateProgress:(NSNumber *) progress {
+    CGFloat progressValue = [progress floatValue];
+    self.hudAnimator.progress = progressValue;
+}
+
 - (void)showActivity {
     self.hudAnimator = nil;
     self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
-    self.hudAnimator.mode = MBProgressHUDModeIndeterminate;
+    self.hudAnimator.mode = MBProgressHUDModeDeterminate;
     self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
     [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
     [self.hudAnimator.button addTarget:self action:@selector(cancelLoadList:) forControlEvents:UIControlEventTouchUpInside];

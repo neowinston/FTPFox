@@ -19,7 +19,7 @@ typedef void(^completionUploadFile)(NSDictionary *);
 }
 
 - (id<GRRequestProtocol>)getFileListWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionGetList) callback;
-- (id<GRRequestProtocol>)downloadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionDownloadFile) callback;
-- (id<GRRequestProtocol>)uploadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionUploadFile) callback;
+- (id<GRDataExchangeRequestProtocol>)downloadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionDownloadFile) callback;
+- (id<GRDataExchangeRequestProtocol>)uploadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionUploadFile) callback;
 
 @end

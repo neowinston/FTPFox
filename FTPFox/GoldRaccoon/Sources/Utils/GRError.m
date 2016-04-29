@@ -102,7 +102,7 @@
             break;
             
         case kGRFTPServerFileNotAvailable:
-            errorMessage = @"File or directory not available or directory already exists.";
+            errorMessage = @"File or directory not available or directory already exists, Or you don't have permission for this operation.";
             break;
             
         case kGRFTPServerUnknownError:

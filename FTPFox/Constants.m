@@ -25,8 +25,12 @@ NSString *const  kLoginErrorKey = @"LoginErrorKey";
 NSString *const  kDownloadErrorKey = @"DownloadErrorKey";
 NSString *const  kUploadErrorKey = @"UploadErrorKey";
 
+NSString *const  kRequestCompletePercentKey = @"RequestCompletePercentKey";
+
+NSString *const  kRequestCompleteAlertKey = @"RequestCompleteAlertKey";
+
 NSString *const  kFilePathKey = @"FilePathKey";
 
-
+NSString *const  kRequestManagerObjKey = @"RequestManagerObjKey";
 
 @end

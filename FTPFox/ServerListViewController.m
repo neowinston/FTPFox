@@ -18,7 +18,7 @@
     
 }
 
-@property (nonatomic, strong) NSArray *serverListArray;
+@property (nonatomic, strong) NSMutableArray *serverListArray;
 @property (weak, nonatomic) IBOutlet UITableView *serverListTableView;
 @property (nonatomic, strong) MBProgressHUD *hudAnimator;
 @property (nonatomic, weak) id<GRRequestProtocol> request;
@@ -27,6 +27,7 @@
 
 - (void)showActivity;
 - (void)hideActivity;
+- (void)updateProgress:(NSNumber *) progress;
 
 @end
 
@@ -51,7 +52,7 @@
     [super viewDidAppear:animated];
     
     NSDictionary *credentialsDict = [[NSURLCredentialStorage sharedCredentialStorage] allCredentials];
-    self.serverListArray = [credentialsDict allKeys];
+    self.serverListArray = [[credentialsDict allKeys] mutableCopy];
     [self.serverListTableView reloadData];
     
 //    if ([credentialsDict count] > 0) {
@@ -130,8 +131,6 @@
         NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[protectionSpace host], kCurrentHostKey,  [cred user], kCurrentUserKey, [cred password], kCurrentPasswordKey, nil];
         
         self.request = [self.requestController getFileListWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
-            [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
-            
             if (nil != complInfo) {
                 NSError *error = [complInfo valueForKey:kFileListingErrorKey];
                 
@@ -140,17 +139,30 @@
                 }
                 
                 if (nil != error) {
+                    [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
                     NSDictionary *userInfo = [error userInfo];
                     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
                     [alert show];
                 }
                 else
                 {
-                    [self performSelectorOnMainThread:@selector(switchTab) withObject:nil waitUntilDone:NO];
-                    UITabBarController *tabBarCtlr = (UITabBarController *)self.parentViewController;
-                    UINavigationController *navController = [[tabBarCtlr viewControllers] objectAtIndex:1];
-                    FilesTableViewController *filesVC = [[navController viewControllers] objectAtIndex:0];
-                    [filesVC loginCompletedWithInfo:complInfo];
+                    if ([complInfo objectForKey:kRequestCompleteAlertKey])
+                    {
+                        [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
+
+                        [self performSelectorOnMainThread:@selector(switchTab) withObject:nil waitUntilDone:NO];
+                        UITabBarController *tabBarCtlr = (UITabBarController *)self.parentViewController;
+                        UINavigationController *navController = [[tabBarCtlr viewControllers] objectAtIndex:1];
+                        FilesTableViewController *filesVC = [[navController viewControllers] objectAtIndex:0];
+                        [filesVC loginCompletedWithInfo:complInfo];
+                    }
+                    else if (nil != [complInfo objectForKey:kRequestCompletePercentKey])
+                    {
+                        NSNumber *progress = [complInfo objectForKey:kRequestCompletePercentKey];
+                        if (nil != progress) {
+                            [self performSelectorOnMainThread:@selector(updateProgress:) withObject:progress waitUntilDone:NO];
+                        }
+                    }
                 }
             }
         }];
@@ -165,6 +177,26 @@
     }
 }
 
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (editingStyle == UITableViewCellEditingStyleDelete)
+    {
+        NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
+        NSURLProtectionSpace *protectionSpace = [self.serverListArray objectAtIndex:indexPath.row];
+
+        if ([hostName isEqualToString:[protectionSpace host]]) {
+            [[NSUserDefaults standardUserDefaults] removeObjectForKey:kCurrentHostKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+        
+        [self.serverListArray removeObject:protectionSpace];
+        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+    }
+}
+
 - (void)switchTab {
     UITabBarController *tabBarCtlr = (UITabBarController *)self.parentViewController;
     [tabBarCtlr setSelectedIndex:1];
@@ -175,7 +207,7 @@
 - (void)showActivity {
     self.hudAnimator = nil;
     self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.tabBarController.view animated:YES];
-    self.hudAnimator.mode = MBProgressHUDModeIndeterminate;
+    self.hudAnimator.mode = MBProgressHUDModeDeterminate;
     self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
     [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
     [self.hudAnimator.button addTarget:self action:@selector(cancelLoadList:) forControlEvents:UIControlEventTouchUpInside];
@@ -191,5 +223,10 @@
     [self.request cancelRequest];
     [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
 }
-    
+
+- (void)updateProgress:(NSNumber *) progress {
+    CGFloat progressValue = [progress floatValue];
+    self.hudAnimator.progress = progressValue;
+}
+
 @end

@@ -68,30 +68,6 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-//    NSURLProtectionSpace *protectionSpace = [self.fileListArray objectAtIndex:indexPath.row];
-//    
-//    NSDictionary *credDic = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:protectionSpace];
-//    NSArray *userNameArray = [credDic allKeys];
-//    NSURLCredential *cred = [credDic objectForKey:[userNameArray objectAtIndex:0]];
-//    
-//    if ([cred hasPassword])
-//    {
-//        self.requestsManager = [[GRRequestsManager alloc] initWithHostname:[protectionSpace host]
-//                                                                      user:[cred user]
-//                                                                  password:[cred password]];
-//        self.requestsManager.delegate = self;
-//        [self.requestsManager addRequestForListDirectoryAtPath:@"/"];
-//        [self.requestsManager startProcessingRequests];
-//    }
-//    else
-//    {
-//        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-//        LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-//        loginViewController.selectedSpace = protectionSpace;
-//        [self presentViewController:loginViewController animated:YES completion:^{
-//        }];
-//    }
 }
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
