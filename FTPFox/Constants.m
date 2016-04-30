@@ -10,6 +10,8 @@
 
 @implementation Constants
 
+NSString *const  ServerChangeNotification = @"ServerChangeNotification";
+
 NSString *const  kNetworkErrorDomain = @"NetworkErrorDomain";
 
 NSString *const  kCurrentHostKey = @"CurrentHostKey";

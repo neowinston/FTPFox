@@ -182,8 +182,14 @@
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         
         if (self.serverListArray.count) {
-            [[NSUserDefaults standardUserDefaults] setObject:[self.serverListArray objectAtIndex:0] forKey:kCurrentHostKey];
+            [[NSUserDefaults standardUserDefaults] setObject:[[self.serverListArray objectAtIndex:0] host] forKey:kCurrentHostKey];
             [[NSUserDefaults standardUserDefaults] synchronize];
+            
+            UITabBarController *tabBarCtlr = (UITabBarController *)self.parentViewController;
+            FilesTableViewController *fileVC = (FilesTableViewController *)[[[[tabBarCtlr viewControllers] objectAtIndex:1] viewControllers] objectAtIndex:0];
+            [fileVC serverChanged:[[self.serverListArray objectAtIndex:0] host]];
+            
+//            [[NSNotificationCenter defaultCenter] postNotificationName:ServerChangeNotification object:[[self.serverListArray objectAtIndex:0] host]];
         }
         else
         {

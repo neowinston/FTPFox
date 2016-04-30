@@ -28,23 +28,37 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverChanged:) name:ServerChangeNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
     NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
-    
     if (nil == hostName) {
         hostName = @"Files";
         self.fileListArray = nil;
         [self.tableView reloadData];
     }
-    
     [self.navigationItem setTitle:hostName];
+}
+
+- (void)viewDidUnload:(BOOL)animated {
+    [super viewDidDisappear:animated];
+//    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc {
+//    [[NSNotificationCenter defaultCenter]  removeObserver:self];
+}
+
+- (void)serverChanged:(NSString *)newHost {
+    self.fileListArray = nil;
+    [self.tableView reloadData];
 }
 
 #pragma mark - Table view data source

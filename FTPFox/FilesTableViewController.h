@@ -11,5 +11,6 @@
 @interface FilesTableViewController : UITableViewController
 
 - (void)loginCompletedWithInfo:(NSDictionary *) userInfo;
+- (void)serverChanged:(NSString *)newHost;
 
 @end

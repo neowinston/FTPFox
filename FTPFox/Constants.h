@@ -13,6 +13,8 @@
 
 @interface Constants : NSObject
 
+extern NSString *const  ServerChangeNotification;
+
 extern NSString *const  kNetworkErrorDomain;
 
 extern NSString *const  kCurrentHostKey;
