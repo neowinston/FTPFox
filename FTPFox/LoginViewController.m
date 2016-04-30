@@ -50,9 +50,9 @@
     }
     else
     {
-        self.userNameTextField.text = @"eauusers";
-        self.passwordTextField.text = @"YTNhOTNmYTAwOTljYmFmMDlhMTJlODVl";
-        self.serverTextField.text = @"ftp://52.26.67.76";
+//        self.userNameTextField.text = @"eauusers";
+//        self.passwordTextField.text = @"YTNhOTNmYTAwOTljYmFmMDlhMTJlODVl";
+//        self.serverTextField.text = @"ftp://52.26.67.76";
     }
 }
 
