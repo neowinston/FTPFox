@@ -229,7 +229,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fSX-41-QuV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1120" y="571"/>
+            <point key="canvasLocation" x="-1203" y="499"/>
         </scene>
         <!--Servers-->
         <scene sceneID="isc-gv-36W">
@@ -287,7 +287,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="1F4-FU-rvY" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1149" y="-602"/>
+            <point key="canvasLocation" x="-1132" y="-666"/>
         </scene>
         <!--File Preview View Controller-->
         <scene sceneID="5sa-g9-4zZ">
@@ -297,22 +297,22 @@
                         <viewControllerLayoutGuide type="top" id="Bt4-0E-2tQ"/>
                         <viewControllerLayoutGuide type="bottom" id="SfH-Cx-NPG"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="goe-tX-bLW">
+                    <view key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="goe-tX-bLW">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <webView multipleTouchEnabled="YES" contentMode="scaleAspectFit" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cdM-Ox-EsX">
-                                <rect key="frame" x="0.0" y="64" width="600" height="487"/>
+                            <webView multipleTouchEnabled="YES" contentMode="scaleToFill" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cdM-Ox-EsX">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="deviceRGB"/>
                                 <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
                             </webView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="cdM-Ox-EsX" firstAttribute="top" secondItem="Bt4-0E-2tQ" secondAttribute="bottom" id="BKT-jZ-zqb"/>
-                            <constraint firstItem="SfH-Cx-NPG" firstAttribute="top" secondItem="cdM-Ox-EsX" secondAttribute="bottom" id="Shs-d8-3jw"/>
-                            <constraint firstItem="cdM-Ox-EsX" firstAttribute="leading" secondItem="goe-tX-bLW" secondAttribute="leadingMargin" constant="-20" id="eB2-KT-Nu5"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="cdM-Ox-EsX" secondAttribute="trailing" constant="-20" id="jt0-H0-v62"/>
+                            <constraint firstAttribute="trailing" secondItem="cdM-Ox-EsX" secondAttribute="trailing" id="0qT-Ny-H21"/>
+                            <constraint firstAttribute="bottom" secondItem="cdM-Ox-EsX" secondAttribute="bottom" id="CiE-Ql-7J9"/>
+                            <constraint firstItem="cdM-Ox-EsX" firstAttribute="top" secondItem="goe-tX-bLW" secondAttribute="top" id="N1i-0G-5ew"/>
+                            <constraint firstItem="cdM-Ox-EsX" firstAttribute="leading" secondItem="goe-tX-bLW" secondAttribute="leading" id="gkB-SR-pez"/>
                         </constraints>
                     </view>
                     <connections>
@@ -321,7 +321,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e7a-ou-LS5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1052" y="582"/>
+            <point key="canvasLocation" x="-919" y="257"/>
         </scene>
         <!--Files-->
         <scene sceneID="5ZO-SR-bFj">

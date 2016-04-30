@@ -69,10 +69,22 @@
 }
 
 - (IBAction)loginButtonClicked:(UIButton *)sender {
+    
+    NSString *usernameStr = self.userNameTextField.text;
+    NSString *passwordStr = self.passwordTextField.text;
+    NSString *hostStr = self.serverTextField.text;
+
+    if ((nil == usernameStr || [usernameStr isEqualToString:@""]) || (nil == hostStr || [hostStr isEqualToString:@""]) || (nil == passwordStr || [passwordStr isEqualToString:@""])) {
+        
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Invalid Credentials, please try again" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+        [alert show];
+        return;
+    }
+    
     [self performSelectorOnMainThread:@selector(showActivity) withObject:nil waitUntilDone:NO];
 
     self.requestController = [[FTPRequestController alloc] init];
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:self.serverTextField.text, kCurrentHostKey,  self.userNameTextField.text, kCurrentUserKey, self.passwordTextField.text, kCurrentPasswordKey, [NSNumber numberWithBool:self.isSavePasswordEnabled], kSavePasswordEnabledKey, nil];
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:hostStr, kCurrentHostKey, usernameStr, kCurrentUserKey, passwordStr, kCurrentPasswordKey, [NSNumber numberWithBool:self.isSavePasswordEnabled], kSavePasswordEnabledKey, nil];
     
     self.request = [self.requestController getFileListWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
         if (nil != complInfo) {
