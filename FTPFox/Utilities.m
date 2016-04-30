@@ -45,7 +45,6 @@
     return documentsPath;
 }
 
-
 + (NSURL *)documentsDirectory {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
@@ -80,6 +79,22 @@
     }
     
     return protectionSpace;
+}
+
++ (NSString *)generateFileNameWithExtension:(NSString *)extensionString {
+    
+    if ([extensionString rangeOfString:@"."].location == NSNotFound) {
+        extensionString = [NSString stringWithFormat:@".%@", extensionString];
+    }
+    
+    extensionString = (([extensionString isEqualToString:@""] || (nil == extensionString)) ? @".png" : extensionString);
+    NSDate *time = [NSDate date];
+    NSDateFormatter* df = [NSDateFormatter new];
+    [df setDateFormat:@"dd-MM-yyyy-hh-mm-ss"];
+    NSString *timeString = [df stringFromDate:time];
+    NSString *fileName = [NSString stringWithFormat:@"newFile-%@%@", timeString, extensionString];
+    
+    return fileName;
 }
 
 

@@ -9,14 +9,15 @@
 #import <Foundation/Foundation.h>
 #import "GRRequestProtocol.h"
 
-typedef void(^completionGetList)(NSDictionary *);
-typedef void(^completionDownloadFile)(NSDictionary *);
-typedef void(^completionUploadFile)(NSDictionary *);
-
 
 @interface FTPRequestController : NSObject  {
     
 }
+
+typedef void(^completionGetList)(NSDictionary *);
+typedef void(^completionDownloadFile)(NSDictionary *);
+typedef void(^completionUploadFile)(NSDictionary *);
+
 
 - (id<GRRequestProtocol>)getFileListWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionGetList) callback;
 - (id<GRDataExchangeRequestProtocol>)downloadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionDownloadFile) callback;

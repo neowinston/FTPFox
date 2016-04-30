@@ -76,8 +76,10 @@
 
     if ((nil == usernameStr || [usernameStr isEqualToString:@""]) || (nil == hostStr || [hostStr isEqualToString:@""]) || (nil == passwordStr || [passwordStr isEqualToString:@""])) {
         
-        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Invalid Credentials, please try again" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-        [alert show];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:@"Invalid Credentials, please try again" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+            [alert show];
+        });
         return;
     }
     
@@ -98,8 +100,11 @@
             {
                 [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
                 NSDictionary *userInfo = [error userInfo];
-                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                [alert show];
+
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                    [alert show];
+                });
             }
             else
             {

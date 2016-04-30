@@ -26,7 +26,6 @@
 - (void)updateProgress:(NSDictionary *) userInfo;
 
 - (NSString *)createImageLocallyAndGetPath;
-- (NSString*)generateFileNameWithExtension:(NSString *)extensionString;
 - (void)deleteRequestController:(FTPRequestController *) manager;
 
 @end
@@ -153,8 +152,10 @@
                     [self deleteRequestController:oldManager];
                     
                     NSDictionary *userInfo = [error userInfo];
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                    [alert show];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                        [alert show];
+                    });
                 }
                 else {
                     if ([complInfo objectForKey:kRequestCompleteAlertKey])
@@ -178,7 +179,7 @@
 - (NSString *)createImageLocallyAndGetPath {
     UIImage *imageToUpload = [self.imageInfoToUpload objectForKey:UIImagePickerControllerOriginalImage];
     NSData *imageData = UIImagePNGRepresentation(imageToUpload);
-    NSString *filePath = [[Utilities documentsDirectoryPath] stringByAppendingPathComponent:[self generateFileNameWithExtension:@".png"]];
+    NSString *filePath = [[Utilities documentsDirectoryPath] stringByAppendingPathComponent:[Utilities generateFileNameWithExtension:@".png"]];
     [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
     BOOL created = [imageData writeToFile:filePath atomically:YES];
     
@@ -186,17 +187,6 @@
         return filePath;
     }
     return nil;
-}
-
-- (NSString*)generateFileNameWithExtension:(NSString *)extensionString {
-    extensionString = (([extensionString isEqualToString:@""] || (nil == extensionString)) ? @".png" : extensionString);
-    NSDate *time = [NSDate date];
-    NSDateFormatter* df = [NSDateFormatter new];
-    [df setDateFormat:@"dd-MM-yyyy-hh-mm-ss"];
-    NSString *timeString = [df stringFromDate:time];
-    NSString *fileName = [NSString stringWithFormat:@"newFile-%@%@", timeString, extensionString];
-    
-    return fileName;
 }
 
 - (void)deleteRequestController:(FTPRequestController *) manager {

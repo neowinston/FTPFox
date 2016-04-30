@@ -156,8 +156,9 @@
     [self setupRequestManager];
 
     NSString *remotePath = [userInfo valueForKey:kFilePathKey];
-    NSString *filePath = [[Utilities documentsDirectoryPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"image.%@", remotePath.pathExtension]];
-    [[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
+    NSString *filePath = [[Utilities documentsDirectoryPath] stringByAppendingPathComponent:[Utilities generateFileNameWithExtension:remotePath.pathExtension]];
+    NSError *error = nil;
+    [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
 
     id<GRDataExchangeRequestProtocol> request = [self.requestsManager addRequestForDownloadFileAtRemotePath:[remotePath lastPathComponent] toLocalPath:filePath];
     [self.requestsManager startProcessingRequests];
@@ -204,7 +205,6 @@
     
     return request;
 }
-
 
 #pragma mark - GRRequestsManagerDelegate
 

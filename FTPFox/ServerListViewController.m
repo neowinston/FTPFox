@@ -122,8 +122,10 @@
                 if (nil != error) {
                     [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
                     NSDictionary *userInfo = [error userInfo];
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
-                    [alert show];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:[userInfo valueForKey:@"message"] delegate:nil cancelButtonTitle:@"OK" otherButtonTitles: nil];
+                        [alert show];
+                    });
                 }
                 else
                 {
