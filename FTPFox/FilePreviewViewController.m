@@ -6,6 +6,8 @@
 //  Copyright © 2016 Nilesh Jaiswal. All rights reserved.
 //
 
+@import ImageIO;
+
 #import "FilePreviewViewController.h"
 #import "FTPRequestController.h"
 #import "MBProgressHUD.h"
@@ -24,7 +26,8 @@
 - (void)hideActivity;
 - (void)updateProgress:(NSNumber *) progress;
 - (void)showFilePreview;
-
+- (BOOL)isImageSourec:(NSString *)imagePath;
+- (void)addImageViewWithImagePath:(NSString *) imagePath;
 @end
 
 @implementation FilePreviewViewController
@@ -85,10 +88,25 @@
                 if ([complInfo objectForKey:kRequestCompleteAlertKey])
                 {
                     [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
+                    NSString *localFilePath = [self.request localFilePath];
+                    
+                    if ([[NSFileManager defaultManager] fileExistsAtPath:localFilePath])
+                    {
+                        [[self.view viewWithTag:1010] removeFromSuperview];
 
-                    NSString *localFilePath = [self.request  localFilePath];
-                    NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:localFilePath]];
-                    [self.contentViewerWebView loadRequest:request];
+                        if ([self isImageSourec:localFilePath])
+                        {
+                            self.contentViewerWebView.hidden = YES;
+                            [self addImageViewWithImagePath:localFilePath];
+                        }
+                        else
+                        {
+                            self.contentViewerWebView.hidden = NO;
+
+                            NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:localFilePath]];
+                            [self.contentViewerWebView loadRequest:request];
+                        }
+                    }
                 }
                 else if (nil != [complInfo objectForKey:kRequestCompletePercentKey])
                 {
@@ -101,6 +119,64 @@
         }
     }];
 }
+
+
+- (void)addImageViewWithImagePath:(NSString *) imagePath {
+    
+    UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
+    imageView.tag = 1010;
+    imageView.contentMode = UIViewContentModeScaleAspectFit;
+    imageView.clipsToBounds = YES;
+    imageView.frame = self.view.bounds;
+    [self.view addSubview:imageView];
+    
+    imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    NSLayoutConstraint *bottomConstraint = [NSLayoutConstraint constraintWithItem:imageView
+                                                                        attribute:NSLayoutAttributeBottom
+                                                                        relatedBy:NSLayoutRelationEqual
+                                                                           toItem:self.view
+                                                                        attribute:NSLayoutAttributeBottom
+                                                                       multiplier:1.0
+                                                                         constant:0];
+    
+    NSLayoutConstraint *topConstraint = [NSLayoutConstraint constraintWithItem:imageView
+                                                                     attribute:NSLayoutAttributeTop
+                                                                     relatedBy:NSLayoutRelationEqual
+                                                                        toItem:self.view
+                                                                     attribute:NSLayoutAttributeTop
+                                                                    multiplier:1.0
+                                                                      constant:0];
+    NSLayoutConstraint *leadingConstraint = [NSLayoutConstraint constraintWithItem:imageView
+                                                                         attribute:NSLayoutAttributeLeading
+                                                                         relatedBy:NSLayoutRelationEqual
+                                                                            toItem:self.view
+                                                                         attribute:NSLayoutAttributeLeading
+                                                                        multiplier:1.0
+                                                                          constant:0];
+    NSLayoutConstraint *traillingConstraint = [NSLayoutConstraint constraintWithItem:imageView
+                                                                           attribute:NSLayoutAttributeTrailing
+                                                                           relatedBy:NSLayoutRelationEqual
+                                                                              toItem:self.view
+                                                                           attribute:NSLayoutAttributeTrailing
+                                                                          multiplier:1.0
+                                                                            constant:0];
+    
+    [self.view addConstraints:@[bottomConstraint, topConstraint, leadingConstraint,  traillingConstraint]];
+}
+
+- (BOOL)isImageSourec:(NSString *)imagePath{
+    
+    NSString *ext = [imagePath pathExtension];
+    
+    return (([ext caseInsensitiveCompare:@"png"] == NSOrderedSame) ||
+            ([ext caseInsensitiveCompare:@"jpg"] == NSOrderedSame) ||
+            ([ext caseInsensitiveCompare:@"jpeg"] == NSOrderedSame) ||
+            ([ext caseInsensitiveCompare:@"tgt"] == NSOrderedSame) ||
+            ([ext caseInsensitiveCompare:@"gig"] == NSOrderedSame));
+}
+
 
 - (void)updateProgress:(NSNumber *) progress {
     dispatch_async(dispatch_get_main_queue(), ^{
