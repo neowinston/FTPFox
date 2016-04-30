@@ -9,10 +9,6 @@
 @import ImageIO;
 
 #import "FilePreviewViewController.h"
-#import "FTPRequestController.h"
-#import "MBProgressHUD.h"
-#import "Constants.h"
-#import "Utilities.h"
 
 
 @interface FilePreviewViewController ()
@@ -101,9 +97,6 @@
 
                         if ([self isImageSourec:localFilePath])
                         {
-//                            self.contentViewerWebView.hidden = YES;
-//                            [self addImageViewWithImagePath:localFilePath];
-                            
                             NSURL * file = [NSURL URLWithString:localFilePath relativeToURL:[Utilities documentsDirectory]];
                             NSURL * absoluteFileString = [file absoluteURL];
                             

@@ -9,7 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "GRRequestProtocol.h"
 
-
 @interface FTPRequestController : NSObject  {
     
 }

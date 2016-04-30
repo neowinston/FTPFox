@@ -8,8 +8,6 @@
 
 #import "FTPRequestController.h"
 #import "GRRequestsManager.h"
-#import "Constants.h"
-#import "Utilities.h"
 
 @interface FTPRequestController () <GRRequestsManagerDelegate> {
     
@@ -60,19 +58,23 @@
 #pragma mark - Instance Method
 
 - (id<GRRequestProtocol>)getFileListWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionGetList) callback {
-    self.hostname = [userInfo objectForKey:kCurrentHostKey];
-    self.username = [userInfo objectForKey:kCurrentUserKey];
-    self.password = [userInfo objectForKey:kCurrentPasswordKey];
     
-    NSNumber *savePassObj = [userInfo objectForKey:kSavePasswordEnabledKey];
-    
-    if(savePassObj)
+    if (nil != userInfo)
     {
-        self.isSavePasswordEnabled = [savePassObj boolValue];
+        self.hostname = [userInfo objectForKey:kCurrentHostKey];
+        self.username = [userInfo objectForKey:kCurrentUserKey];
+        self.password = [userInfo objectForKey:kCurrentPasswordKey];
+        self.isSavePasswordEnabled = [[userInfo objectForKey:kSavePasswordEnabledKey] boolValue];
     }
     else
     {
         self.isSavePasswordEnabled = YES;
+        NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
+        NSURLCredential *cred = [Utilities credentialForProtectionSpace:[Utilities protectionSpaceForHost:hostName]];
+        
+        self.hostname = hostName;
+        self.username = [cred user];
+        self.password = [cred password];
     }
     
     
@@ -88,12 +90,9 @@
 - (id<GRDataExchangeRequestProtocol>)downloadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionGetList) callback {
     
     NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
-    NSURLProtectionSpace *protectionSpace = [Utilities protectionSpaceForHost:hostName];
-    NSDictionary *credDic = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:protectionSpace];
-    NSArray *userNameArray = [credDic allKeys];
-    NSURLCredential *cred = [credDic objectForKey:[userNameArray objectAtIndex:0]];
+    NSURLCredential *cred = [Utilities credentialForProtectionSpace:[Utilities protectionSpaceForHost:hostName]];
     
-    self.hostname = [protectionSpace host];
+    self.hostname = hostName;
     self.username = [cred user];
     self.password = [cred password];
     
@@ -124,13 +123,10 @@
 }
 
 - (id<GRDataExchangeRequestProtocol>)uploadFileWithInfo:(NSDictionary *) userInfo withCompletionHandler:(completionUploadFile) callback {
+
     NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
-    NSURLProtectionSpace *protectionSpace = [Utilities protectionSpaceForHost:hostName];
-    NSDictionary *credDic = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:protectionSpace];
-    NSArray *userNameArray = [credDic allKeys];
-    NSURLCredential *cred = [credDic objectForKey:[userNameArray objectAtIndex:0]];
-    
-    self.hostname = [protectionSpace host];
+    NSURLCredential *cred = [Utilities credentialForProtectionSpace:[Utilities protectionSpaceForHost:hostName]];
+    self.hostname = hostName;
     self.username = [cred user];
     self.password = [cred password];
     

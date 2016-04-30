@@ -17,5 +17,5 @@
 + (NSString *)documentsDirectoryPath;
 + (NSURLProtectionSpace *)protectionSpaceForHost:(NSString *) string;
 + (NSString *)generateFileNameWithExtension:(NSString *)extensionString;
-
++ (NSURLCredential *)credentialForProtectionSpace:(NSURLProtectionSpace *) protectionSpace;
 @end

@@ -8,8 +8,6 @@
 
 #import "RootTabBarController.h"
 #import "LoginViewController.h"
-#import "FilesTableViewController.h"
-#import "ServerListViewController.h"
 
 @interface RootTabBarController ()
 
@@ -41,7 +39,6 @@
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (BOOL)tabBarController:(UITabBarController *)tabBarController shouldSelectViewController:(UIViewController *)viewController {
@@ -71,6 +68,5 @@
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {
     [self tabSelectedAtIndex:tabBarController.selectedIndex];
 }
-
 
 @end

@@ -81,6 +81,13 @@
     return protectionSpace;
 }
 
++ (NSURLCredential *)credentialForProtectionSpace:(NSURLProtectionSpace *) protectionSpace {
+    NSDictionary *credDic = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:protectionSpace];
+    NSArray *userNameArray = [credDic allKeys];
+    NSURLCredential *cred = [credDic objectForKey:[userNameArray objectAtIndex:0]];
+    return cred;
+}
+
 + (NSString *)generateFileNameWithExtension:(NSString *)extensionString {
     
     if ([extensionString rangeOfString:@"."].location == NSNotFound) {

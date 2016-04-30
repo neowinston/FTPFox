@@ -7,7 +7,6 @@
 //
 
 #import "FilesTableViewController.h"
-#import "Constants.h"
 #import "FilePreviewViewController.h"
 
 @interface FilesTableViewController ()
@@ -28,7 +27,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(serverChanged:) name:ServerChangeNotification object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -44,16 +42,10 @@
 
 - (void)viewDidUnload:(BOOL)animated {
     [super viewDidDisappear:animated];
-//    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)dealloc {
-//    [[NSNotificationCenter defaultCenter]  removeObserver:self];
 }
 
 - (void)serverChanged:(NSString *)newHost {

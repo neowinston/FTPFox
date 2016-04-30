@@ -7,11 +7,7 @@
 //
 
 #import "ServerListViewController.h"
-#import "Constants.h"
-#import "GRRequestProtocol.h"
 #import "LoginViewController.h"
-#import "MBProgressHUD.h"
-#import "FTPRequestController.h"
 #import "FilesTableViewController.h"
 
 @interface ServerListViewController () {
@@ -95,26 +91,19 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     NSURLProtectionSpace *protectionSpace = [self.serverListArray objectAtIndex:indexPath.row];
-
-    NSDictionary *credDic = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:protectionSpace];
-    NSArray *userNameArray = [credDic allKeys];
-    NSURLCredential *cred = [credDic objectForKey:[userNameArray objectAtIndex:0]];
+    NSURLCredential *cred = [Utilities credentialForProtectionSpace:protectionSpace];
 
     if ([cred hasPassword] && (NO == [[cred password] isEqualToString:@""]))
     {
         [self performSelectorOnMainThread:@selector(showActivity) withObject:nil waitUntilDone:NO];
-        
         self.requestController = [[FTPRequestController alloc] init];
-        NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys:[protectionSpace host], kCurrentHostKey,  [cred user], kCurrentUserKey, [cred password], kCurrentPasswordKey, nil];
         
-        self.request = [self.requestController getFileListWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
+        self.request = [self.requestController getFileListWithInfo:nil withCompletionHandler:^(NSDictionary *complInfo) {
             if (nil != complInfo) {
                 NSError *error = [complInfo valueForKey:kFileListingErrorKey];
-                
                 if (nil == error) {
                     error = [complInfo valueForKey:kLoginErrorKey];
                 }
@@ -175,9 +164,8 @@
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
         
-        NSDictionary *credDic = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:protectionSpace];
-        NSArray *userNameArray = [credDic allKeys];
-        NSURLCredential *cred = [credDic objectForKey:[userNameArray objectAtIndex:0]];
+        NSURLCredential *cred = [Utilities credentialForProtectionSpace:protectionSpace];
+
         [[NSURLCredentialStorage sharedCredentialStorage] removeCredential:cred forProtectionSpace:protectionSpace];
         
         [self.serverListArray removeObject:protectionSpace];
@@ -190,8 +178,6 @@
             UITabBarController *tabBarCtlr = (UITabBarController *)self.parentViewController;
             FilesTableViewController *fileVC = (FilesTableViewController *)[[[[tabBarCtlr viewControllers] objectAtIndex:1] viewControllers] objectAtIndex:0];
             [fileVC serverChanged:[[self.serverListArray objectAtIndex:0] host]];
-            
-//            [[NSNotificationCenter defaultCenter] postNotificationName:ServerChangeNotification object:[[self.serverListArray objectAtIndex:0] host]];
         }
         else
         {

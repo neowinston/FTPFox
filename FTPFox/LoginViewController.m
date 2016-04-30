@@ -7,15 +7,10 @@
 //
 
 #import "LoginViewController.h"
-#import "GRRequestProtocol.h"
-#import "Constants.h"
-#import "Utilities.h"
-#import "FTPRequestController.h"
-#import "MBProgressHUD.h"
 #import "FilesTableViewController.h"
 
 @interface LoginViewController() {
-    
+   
 }
 
 @property (nonatomic, assign) BOOL isSavePasswordEnabled;
@@ -47,10 +42,8 @@
     if (nil != self.selectedSpace)
     {
         NSURLProtectionSpace *protectionSpace = self.selectedSpace;
-        NSDictionary *credDic = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:protectionSpace];
-        NSArray *userNameArray = [credDic allKeys];
-        NSURLCredential *cred = [credDic objectForKey:[userNameArray objectAtIndex:0]];
-        
+        NSURLCredential *cred = [Utilities credentialForProtectionSpace:protectionSpace];
+
         self.userNameTextField.text = [cred user];
         self.passwordTextField.text = ([cred password] != nil) ? [cred password] : @"";
         self.serverTextField.text = [protectionSpace host];
