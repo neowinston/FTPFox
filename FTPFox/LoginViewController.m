@@ -117,8 +117,10 @@
 }
 
 - (void)switchTab {
-    UITabBarController *tabBarCtlr = (UITabBarController *)self.presentingViewController;
-    [tabBarCtlr setSelectedIndex:1];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UITabBarController *tabBarCtlr = (UITabBarController *)self.presentingViewController;
+        [tabBarCtlr setSelectedIndex:1];
+    });
 }
 
 - (IBAction)cancelButtonClicked:(UIBarButtonItem *)sender {
@@ -134,7 +136,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         self.hudAnimator = nil;
         self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        self.hudAnimator.mode = MBProgressHUDModeDeterminate;
+        self.hudAnimator.mode = MBProgressHUDModeIndeterminate;
         self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
         [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
         [self.hudAnimator.button addTarget:self action:@selector(cancelLoadList:) forControlEvents:UIControlEventTouchUpInside];

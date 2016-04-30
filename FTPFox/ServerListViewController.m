@@ -173,14 +173,34 @@
             [[NSUserDefaults standardUserDefaults] synchronize];
         }
         
+        NSDictionary *credDic = [[NSURLCredentialStorage sharedCredentialStorage] credentialsForProtectionSpace:protectionSpace];
+        NSArray *userNameArray = [credDic allKeys];
+        NSURLCredential *cred = [credDic objectForKey:[userNameArray objectAtIndex:0]];
+        [[NSURLCredentialStorage sharedCredentialStorage] removeCredential:cred forProtectionSpace:protectionSpace];
+        
         [self.serverListArray removeObject:protectionSpace];
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        
+        if (self.serverListArray.count) {
+            [[NSUserDefaults standardUserDefaults] setObject:[self.serverListArray objectAtIndex:0] forKey:kCurrentHostKey];
+            [[NSUserDefaults standardUserDefaults] synchronize];
+        }
+        else
+        {
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+            loginViewController.selectedSpace = nil;
+            [self presentViewController:loginViewController animated:YES completion:^{
+            }];
+        }
     }
 }
 
 - (void)switchTab {
-    UITabBarController *tabBarCtlr = (UITabBarController *)self.parentViewController;
-    [tabBarCtlr setSelectedIndex:1];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        UITabBarController *tabBarCtlr = (UITabBarController *)self.parentViewController;
+        [tabBarCtlr setSelectedIndex:1];
+    });
 }
 
 #pragma mark - Private Methods
@@ -189,7 +209,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         self.hudAnimator = nil;
         self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.tabBarController.view animated:YES];
-        self.hudAnimator.mode = MBProgressHUDModeDeterminate;
+        self.hudAnimator.mode = MBProgressHUDModeIndeterminate;
         self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
         [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
         [self.hudAnimator.button addTarget:self action:@selector(cancelLoadList:) forControlEvents:UIControlEventTouchUpInside];

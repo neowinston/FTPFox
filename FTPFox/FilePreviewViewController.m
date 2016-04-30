@@ -17,8 +17,8 @@
 
 @property (nonatomic, weak) id<GRDataExchangeRequestProtocol> request;
 @property (nonatomic, strong) MBProgressHUD *hudAnimator;
-@property (nonatomic, strong) UIWebView *contentViewer;
 @property (nonatomic, strong) FTPRequestController *requestController;
+@property (weak, nonatomic) IBOutlet UIWebView *contentViewerWebView;
 
 - (void)showActivity;
 - (void)hideActivity;
@@ -31,14 +31,25 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
+    
+    if (nil == hostName) {
+        hostName = @"Files";
+    }
+    
+    if (nil != self.filePath) {
+        hostName = [NSString stringWithFormat:@"%@: %@", hostName, [self.filePath lastPathComponent]];
+    }
+    
+    [self.navigationItem setTitle:hostName];
+
     [self showFilePreview];
 }
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    self.contentViewer = [[UIWebView alloc] initWithFrame:self.view.bounds];
-    [self.view addSubview:self.contentViewer];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -77,7 +88,7 @@
 
                     NSString *localFilePath = [self.request  localFilePath];
                     NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:localFilePath]];
-                    [self.contentViewer loadRequest:request];
+                    [self.contentViewerWebView loadRequest:request];
                 }
                 else if (nil != [complInfo objectForKey:kRequestCompletePercentKey])
                 {
@@ -102,7 +113,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         self.hudAnimator = nil;
         self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
-        self.hudAnimator.mode = MBProgressHUDModeDeterminate;
+        self.hudAnimator.mode = MBProgressHUDModeAnnularDeterminate;
         self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
         [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];
         [self.hudAnimator.button addTarget:self action:@selector(cancelLoadList:) forControlEvents:UIControlEventTouchUpInside];

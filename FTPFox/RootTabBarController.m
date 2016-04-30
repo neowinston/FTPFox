@@ -28,6 +28,11 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
+    
+    NSDictionary *allCred = [[NSURLCredentialStorage sharedCredentialStorage] allCredentials];
+    if (nil == allCred || allCred.count <= 0) {
+        [self tabSelectedAtIndex:0];
+    }
 }
 
 - (void)viewDidLoad {
@@ -44,19 +49,23 @@
 }
 
 - (void)setSelectedIndex:(NSUInteger)selectedIndex {
-    [super setSelectedIndex:selectedIndex];
-    [self tabSelectedAtIndex:selectedIndex];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [super setSelectedIndex:selectedIndex];
+        [self tabSelectedAtIndex:selectedIndex];
+    });
 }
 
 - (void)tabSelectedAtIndex:(NSUInteger)selectedIndex {
-    NSDictionary *allCred = [[NSURLCredentialStorage sharedCredentialStorage] allCredentials];
-    if (nil == allCred || allCred.count <= 0) {
-        UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
-        LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
-        loginViewController.selectedSpace = nil;
-        [self presentViewController:loginViewController animated:YES completion:^{
-        }];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSDictionary *allCred = [[NSURLCredentialStorage sharedCredentialStorage] allCredentials];
+        if (nil == allCred || allCred.count <= 0) {
+            UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
+            LoginViewController *loginViewController = [storyboard instantiateViewControllerWithIdentifier:@"LoginViewController"];
+            loginViewController.selectedSpace = nil;
+            [self presentViewController:loginViewController animated:YES completion:^{
+            }];
+        }
+    });
 }
 
 - (void)tabBarController:(UITabBarController *)tabBarController didSelectViewController:(UIViewController *)viewController {

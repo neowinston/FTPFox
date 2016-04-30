@@ -28,10 +28,15 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+}
 
+- (void)viewDidAppear:(BOOL)animated {
     NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
+    
     if (nil == hostName) {
         hostName = @"Files";
+        self.fileListArray = nil;
+        [self.tableView reloadData];
     }
     
     [self.navigationItem setTitle:hostName];
