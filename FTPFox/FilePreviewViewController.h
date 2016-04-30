@@ -13,6 +13,6 @@
     
 }
 
-@property(nonatomic, strong) NSString *filePath;
+- (void)showFilePreviewWithPath:(NSString *) filePath;
 
 @end

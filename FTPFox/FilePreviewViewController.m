@@ -22,10 +22,11 @@
 @property (nonatomic, strong) FTPRequestController *requestController;
 @property (weak, nonatomic) IBOutlet UIWebView *contentViewerWebView;
 
+@property (nonatomic, strong) NSString *filePath;
+
 - (void)showActivity;
 - (void)hideActivity;
 - (void)updateProgress:(NSNumber *) progress;
-- (void)showFilePreview;
 - (BOOL)isImageSourec:(NSString *)imagePath;
 - (void)addImageViewWithImagePath:(NSString *) imagePath;
 @end
@@ -46,13 +47,11 @@
     }
     
     [self.navigationItem setTitle:hostName];
-
-    [self showFilePreview];
 }
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.filePath = @"";
 }
 
 - (void)didReceiveMemoryWarning {
@@ -64,7 +63,9 @@
     [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
 }
 
-- (void)showFilePreview {
+- (void)showFilePreviewWithPath:(NSString *) filePath {
+    self.filePath = filePath;
+    
     [self performSelectorOnMainThread:@selector(showActivity) withObject:nil waitUntilDone:NO];
     
     self.requestController = [[FTPRequestController alloc] init];
@@ -158,7 +159,6 @@
     }];
 }
 
-
 - (void)addImageViewWithImagePath:(NSString *) imagePath {
     
     UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
@@ -215,7 +215,6 @@
             ([ext caseInsensitiveCompare:@"gig"] == NSOrderedSame));
 }
 
-
 - (void)updateProgress:(NSNumber *) progress {
     dispatch_async(dispatch_get_main_queue(), ^{
         CGFloat progressValue = [progress floatValue];
@@ -226,7 +225,7 @@
 - (void)showActivity {
     dispatch_async(dispatch_get_main_queue(), ^{
         self.hudAnimator = nil;
-        self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
+        self.hudAnimator = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         self.hudAnimator.mode = MBProgressHUDModeAnnularDeterminate;
         self.hudAnimator.label.text = NSLocalizedString(@"Loading...", @"HUD loading title");
         [self.hudAnimator.button setTitle:NSLocalizedString(@"Cancel", @"HUD cancel button title") forState:UIControlStateNormal];

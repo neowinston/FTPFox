@@ -105,11 +105,9 @@
     if ([vc isKindOfClass:[FilePreviewViewController class]])
     {
         filePreviewViewController = (FilePreviewViewController *)vc;
-        filePreviewViewController.filePath = @"";
-        
         NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
         if (nil != hostName) {
-            filePreviewViewController.filePath = [NSString stringWithFormat:@"ftp://%@/%@", hostName, [self.fileListArray objectAtIndex:indexPath.row]];
+            [filePreviewViewController showFilePreviewWithPath:[NSString stringWithFormat:@"ftp://%@/%@", hostName, [self.fileListArray objectAtIndex:indexPath.row]]];
         }
     }
 }

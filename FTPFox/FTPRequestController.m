@@ -24,56 +24,11 @@
 @property (nonatomic, strong) NSString *password;
 @property (nonatomic, assign) BOOL isSavePasswordEnabled;
 
-- (void)listingButton:(id)sender;
-- (void)createDirectoryButton:(id)sender;
-- (void)deleteDirectoryButton:(id)sender;
-- (void)deleteFileButton:(id)sender;
-- (void)uploadFileButton:(id)sender;
-- (void)downloadFileButton:(id)sender;
-
 - (void)setupRequestManager;
 
 @end
 
 @implementation FTPRequestController
-
-- (void)listingButton:(id)sender {
-    [self setupRequestManager];
-    [self.requestsManager addRequestForListDirectoryAtPath:@"/"];
-    [self.requestsManager startProcessingRequests];
-}
-
-- (void)createDirectoryButton:(id)sender {
-    [self setupRequestManager];
-    [self.requestsManager addRequestForCreateDirectoryAtPath:@"NileshFiles/"];
-    [self.requestsManager startProcessingRequests];
-}
-
-- (void)deleteDirectoryButton:(id)sender {
-    [self setupRequestManager];
-    [self.requestsManager addRequestForDeleteDirectoryAtPath:@"dir/"];
-    [self.requestsManager startProcessingRequests];
-}
-
-- (void)deleteFileButton:(id)sender {
-    [self setupRequestManager];
-    [self.requestsManager addRequestForDeleteFileAtPath:@"dir/file.txt"];
-    [self.requestsManager startProcessingRequests];
-}
-
-- (void)uploadFileButton:(id)sender {
-    [self setupRequestManager];
-    NSString *bundlePath = [[NSBundle mainBundle] pathForResource:@"TestFile" ofType:@"txt"];
-    [self.requestsManager addRequestForUploadFileAtLocalPath:bundlePath toRemotePath:@"dir/file.txt"];
-    [self.requestsManager startProcessingRequests];
-}
-
-- (void)downloadFileButton:(id)sender {
-    [self setupRequestManager];
-    NSString *localFilePath = [[Utilities documentsDirectoryPath] stringByAppendingPathComponent:@"DownloadedFile.txt"];
-    [self.requestsManager addRequestForDownloadFileAtRemotePath:@"dir/file.txt" toLocalPath:localFilePath];
-    [self.requestsManager startProcessingRequests];
-}
 
 #pragma mark - Private Methods
 
