@@ -96,13 +96,46 @@
 
                         if ([self isImageSourec:localFilePath])
                         {
-                            self.contentViewerWebView.hidden = YES;
-                            [self addImageViewWithImagePath:localFilePath];
+//                            self.contentViewerWebView.hidden = YES;
+//                            [self addImageViewWithImagePath:localFilePath];
+                            
+                            NSURL * file = [NSURL URLWithString:localFilePath relativeToURL:[Utilities documentsDirectory]];
+                            NSURL * absoluteFileString = [file absoluteURL];
+                            
+                            NSString *imageHTML = [[NSString alloc] initWithFormat:@"%@%@%@", @"<!DOCTYPE html>"
+                                                   "<html lang=\"ja\">"
+                                                   "<head>"
+                                                   "<meta charset=\"UTF-8\">"
+                                                   "<style type=\"text/css\">"
+                                                   "html{margin:0;padding:0;}"
+                                                   "body {"
+                                                   "margin: 0;"
+                                                   "padding: 0;"
+                                                   "color: #363636;"
+                                                   "font-size: 90%;"
+                                                   "line-height: 1.6;"
+                                                   "background: black;"
+                                                   "}"
+                                                   "img{"
+                                                   "position: absolute;"
+                                                   "top: 0;"
+                                                   "bottom: 0;"
+                                                   "left: 0;"
+                                                   "right: 0;"
+                                                   "margin: auto;"
+                                                   "max-width: 100%;"
+                                                   "max-height: 100%;"
+                                                   "}"
+                                                   "</style>"
+                                                   "</head>"
+                                                   "<body id=\"page\">"
+                                                   "<img src='",absoluteFileString,@"'/> </body></html>"];
+                            
+                            [self.contentViewerWebView loadHTMLString:imageHTML baseURL:nil];
                         }
                         else
                         {
                             self.contentViewerWebView.hidden = NO;
-
                             NSURLRequest *request = [[NSURLRequest alloc] initWithURL:[NSURL URLWithString:localFilePath]];
                             [self.contentViewerWebView loadRequest:request];
                         }
