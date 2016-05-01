@@ -109,10 +109,26 @@
     
     [self setupRequestManager];
 
-    NSString *remotePath = [userInfo valueForKey:kFilePathKey];
-    NSString *filePath = [[Utilities documentsDirectoryPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"TempPreviewFile.%@", remotePath.pathExtension]];
+    
+    NSString *documentDirPath = [Utilities documentsDirectoryPath];
     NSError *error = nil;
-    [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
+    for (NSString *file in [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentDirPath error:&error])
+    {
+        NSString *deleteFilePath = [documentDirPath stringByAppendingPathComponent:file];
+        BOOL success = [[NSFileManager defaultManager] removeItemAtPath:deleteFilePath error:&error];
+        
+        if (success)
+        {
+            NSLog(@"File deleted: %@", deleteFilePath);
+        }
+        else
+        {
+            NSLog(@"File not deleted: %@", deleteFilePath);
+        }
+    }
+    
+    NSString *remotePath = [userInfo valueForKey:kFilePathKey];
+    NSString *filePath = [documentDirPath stringByAppendingPathComponent:[Utilities generateFileNameWithExtension:remotePath.pathExtension]];
 
     id<GRDataExchangeRequestProtocol> request = [self.requestsManager addRequestForDownloadFileAtRemotePath:[remotePath lastPathComponent] toLocalPath:filePath];
     [self.requestsManager startProcessingRequests];
