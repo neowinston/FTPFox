@@ -110,7 +110,7 @@
     [self setupRequestManager];
 
     NSString *remotePath = [userInfo valueForKey:kFilePathKey];
-    NSString *filePath = [[Utilities documentsDirectoryPath] stringByAppendingPathComponent:[Utilities generateFileNameWithExtension:remotePath.pathExtension]];
+    NSString *filePath = [[Utilities documentsDirectoryPath] stringByAppendingPathComponent:[NSString stringWithFormat:@"TempPreviewFile.%@", remotePath.pathExtension]];
     NSError *error = nil;
     [[NSFileManager defaultManager] removeItemAtPath:filePath error:&error];
 
