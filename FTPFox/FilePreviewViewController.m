@@ -6,10 +6,7 @@
 //  Copyright © 2016 Nilesh Jaiswal. All rights reserved.
 //
 
-@import ImageIO;
-
 #import "FilePreviewViewController.h"
-
 
 @interface FilePreviewViewController ()
 
@@ -18,40 +15,44 @@
 @property (nonatomic, strong) FTPRequestController *requestController;
 @property (weak, nonatomic) IBOutlet UIWebView *contentViewerWebView;
 
-@property (nonatomic, strong) NSString *filePath;
-
 - (void)showActivity;
 - (void)hideActivity;
 - (void)updateProgress:(NSNumber *) progress;
 - (BOOL)isImageSourec:(NSString *)imagePath;
 - (void)addImageViewWithImagePath:(NSString *) imagePath;
+- (void)updateNavTitle;
+
 @end
 
 @implementation FilePreviewViewController
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
-    NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
-    
-    if (nil == hostName) {
-        hostName = @"Files";
-    }
-    
-    if (nil != self.filePath) {
-        hostName = [NSString stringWithFormat:@"%@: %@", hostName, [self.filePath lastPathComponent]];
-    }
-    
-    [self.navigationItem setTitle:hostName];
+    [self updateNavTitle];
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    self.filePath = @"";
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
+}
+
+- (void)updateNavTitle {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
+        
+        if (nil == hostName) {
+            hostName = @"Files";
+        }
+        
+        if (nil != self.request) {
+            hostName = [NSString stringWithFormat:@"%@: %@", hostName, [[self.request fullRemotePath] lastPathComponent]];
+        }
+        
+        [self.navigationItem setTitle:hostName];
+    });
 }
 
 - (void)cancelLoadList:(UIButton *) sender {
@@ -60,12 +61,10 @@
 }
 
 - (void)showFilePreviewWithPath:(NSString *) filePath {
-    self.filePath = filePath;
-    
     [self performSelectorOnMainThread:@selector(showActivity) withObject:nil waitUntilDone:NO];
     
     self.requestController = [[FTPRequestController alloc] init];
-    NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys: self.filePath, kFilePathKey, nil];
+    NSDictionary *userInfo = [NSDictionary dictionaryWithObjectsAndKeys: filePath, kFilePathKey, nil];
 
     self.request = [self.requestController downloadFileWithInfo:userInfo withCompletionHandler:^(NSDictionary *complInfo) {
         if (nil != complInfo) {

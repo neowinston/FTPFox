@@ -20,6 +20,7 @@
 - (void)startUpload;
 - (void)relaodTable;
 - (void)updateProgress:(NSDictionary *) userInfo;
+- (void)updateNavTitle;
 
 - (NSString *)createImageLocallyAndGetPath;
 - (void)deleteRequestController:(FTPRequestController *) manager;
@@ -40,9 +41,26 @@
     [self.navigationItem setTitle:hostName];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewDidAppear:animated];
+    [self updateNavTitle];
+}
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)updateNavTitle {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        NSString *hostName = [[NSUserDefaults standardUserDefaults] stringForKey:kCurrentHostKey];
+        
+        if (nil == hostName) {
+            hostName = @"Files";
+        }
+        
+        [self.navigationItem setTitle:hostName];
+    });
 }
 
 #pragma mark - Table view data source
