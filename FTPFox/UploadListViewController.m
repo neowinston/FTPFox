@@ -10,6 +10,8 @@
 
 @interface UploadListViewController ()
 
+@property (weak, nonatomic) IBOutlet UINavigationItem *uploadNavigtionBar;
+
 @property (nonatomic, strong) NSDictionary *imageInfoToUpload;
 @property (nonatomic, strong) NSMutableArray *uploadRequestArray;
 @property (nonatomic, strong) FTPRequestController *requestController;
@@ -59,7 +61,7 @@
             hostName = @"Files";
         }
         
-        [self.navigationItem setTitle:hostName];
+        [self.uploadNavigtionBar setTitle:hostName];
     });
 }
 

@@ -192,6 +192,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Uploads" image="uploads.png" id="ufN-D4-VMv"/>
                     <connections>
+                        <outlet property="uploadNavigtionBar" destination="gQ1-Lr-o95" id="Q6E-gG-ln5"/>
                         <outlet property="uploadsTableView" destination="YWQ-Xd-DhC" id="fij-gB-NYy"/>
                     </connections>
                 </viewController>
