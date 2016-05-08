@@ -18,6 +18,7 @@
 @property (nonatomic, strong) MBProgressHUD *hudAnimator;
 @property (nonatomic, strong) FTPRequestController *requestController;
 
+@property (weak, nonatomic) IBOutlet UIBarButtonItem *cancelBarButton;
 @property (weak, nonatomic) IBOutlet UITextField *serverTextField;
 @property (weak, nonatomic) IBOutlet UITextField *userNameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
@@ -56,7 +57,7 @@
     }
 }
 
-- (void)cancelLoadList:(UIButton *) sender {
+- (void)cancelLoadList:(UIButton *)sender {
     [self.request cancelRequest];
     [self performSelectorOnMainThread:@selector(hideActivity) withObject:nil waitUntilDone:NO];
 }

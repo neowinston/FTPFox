@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0D13A9BE1CDF38D00056E335 /* FTPFoxTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D13A9BD1CDF38D00056E335 /* FTPFoxTests.m */; };
+		0D13A9CC1CDF38D70056E335 /* FTPFoxUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 0D13A9CB1CDF38D70056E335 /* FTPFoxUITests.m */; };
 		0DA6F9E61CD08BEF0069D9ED /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DA6F9E51CD08BEF0069D9ED /* main.m */; };
 		0DA6F9E91CD08BEF0069D9ED /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DA6F9E81CD08BEF0069D9ED /* AppDelegate.m */; };
 		0DA6F9EF1CD08BEF0069D9ED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0DA6F9ED1CD08BEF0069D9ED /* Main.storyboard */; };
@@ -43,7 +45,30 @@
 		0DA6FD0E1CD299040069D9ED /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 0DA6FD0D1CD299040069D9ED /* KeychainItemWrapper.m */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		0D13A9C01CDF38D00056E335 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0DA6F9D91CD08BEE0069D9ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0DA6F9E01CD08BEF0069D9ED;
+			remoteInfo = FTPFox;
+		};
+		0D13A9CE1CDF38D70056E335 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0DA6F9D91CD08BEE0069D9ED /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 0DA6F9E01CD08BEF0069D9ED;
+			remoteInfo = FTPFox;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		0D13A9BB1CDF38D00056E335 /* FTPFoxTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FTPFoxTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D13A9BD1CDF38D00056E335 /* FTPFoxTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FTPFoxTests.m; sourceTree = "<group>"; };
+		0D13A9BF1CDF38D00056E335 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0D13A9C91CDF38D70056E335 /* FTPFoxUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FTPFoxUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		0D13A9CB1CDF38D70056E335 /* FTPFoxUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FTPFoxUITests.m; sourceTree = "<group>"; };
+		0D13A9CD1CDF38D70056E335 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0DA6F9E11CD08BEF0069D9ED /* FTPFox.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FTPFox.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0DA6F9E51CD08BEF0069D9ED /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		0DA6F9E71CD08BEF0069D9ED /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -109,6 +134,20 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		0D13A9B81CDF38D00056E335 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0D13A9C61CDF38D70056E335 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0DA6F9DE1CD08BEF0069D9ED /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -121,10 +160,30 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0D13A9BC1CDF38D00056E335 /* FTPFoxTests */ = {
+			isa = PBXGroup;
+			children = (
+				0D13A9BD1CDF38D00056E335 /* FTPFoxTests.m */,
+				0D13A9BF1CDF38D00056E335 /* Info.plist */,
+			);
+			path = FTPFoxTests;
+			sourceTree = "<group>";
+		};
+		0D13A9CA1CDF38D70056E335 /* FTPFoxUITests */ = {
+			isa = PBXGroup;
+			children = (
+				0D13A9CB1CDF38D70056E335 /* FTPFoxUITests.m */,
+				0D13A9CD1CDF38D70056E335 /* Info.plist */,
+			);
+			path = FTPFoxUITests;
+			sourceTree = "<group>";
+		};
 		0DA6F9D81CD08BEE0069D9ED = {
 			isa = PBXGroup;
 			children = (
 				0DA6F9E31CD08BEF0069D9ED /* FTPFox */,
+				0D13A9BC1CDF38D00056E335 /* FTPFoxTests */,
+				0D13A9CA1CDF38D70056E335 /* FTPFoxUITests */,
 				0DA6FC561CD0DAE70069D9ED /* Frameworks */,
 				0DA6F9E21CD08BEF0069D9ED /* Products */,
 			);
@@ -134,6 +193,8 @@
 			isa = PBXGroup;
 			children = (
 				0DA6F9E11CD08BEF0069D9ED /* FTPFox.app */,
+				0D13A9BB1CDF38D00056E335 /* FTPFoxTests.xctest */,
+				0D13A9C91CDF38D70056E335 /* FTPFoxUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -273,6 +334,42 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		0D13A9BA1CDF38D00056E335 /* FTPFoxTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0D13A9C21CDF38D00056E335 /* Build configuration list for PBXNativeTarget "FTPFoxTests" */;
+			buildPhases = (
+				0D13A9B71CDF38D00056E335 /* Sources */,
+				0D13A9B81CDF38D00056E335 /* Frameworks */,
+				0D13A9B91CDF38D00056E335 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0D13A9C11CDF38D00056E335 /* PBXTargetDependency */,
+			);
+			name = FTPFoxTests;
+			productName = FTPFoxTests;
+			productReference = 0D13A9BB1CDF38D00056E335 /* FTPFoxTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		0D13A9C81CDF38D70056E335 /* FTPFoxUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0D13A9D01CDF38D70056E335 /* Build configuration list for PBXNativeTarget "FTPFoxUITests" */;
+			buildPhases = (
+				0D13A9C51CDF38D70056E335 /* Sources */,
+				0D13A9C61CDF38D70056E335 /* Frameworks */,
+				0D13A9C71CDF38D70056E335 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				0D13A9CF1CDF38D70056E335 /* PBXTargetDependency */,
+			);
+			name = FTPFoxUITests;
+			productName = FTPFoxUITests;
+			productReference = 0D13A9C91CDF38D70056E335 /* FTPFoxUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		0DA6F9E01CD08BEF0069D9ED /* FTPFox */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 0DA6F9F81CD08BEF0069D9ED /* Build configuration list for PBXNativeTarget "FTPFox" */;
@@ -299,6 +396,14 @@
 				LastUpgradeCheck = 0720;
 				ORGANIZATIONNAME = "Nilesh Jaiswal";
 				TargetAttributes = {
+					0D13A9BA1CDF38D00056E335 = {
+						CreatedOnToolsVersion = 7.3;
+						TestTargetID = 0DA6F9E01CD08BEF0069D9ED;
+					};
+					0D13A9C81CDF38D70056E335 = {
+						CreatedOnToolsVersion = 7.3;
+						TestTargetID = 0DA6F9E01CD08BEF0069D9ED;
+					};
 					0DA6F9E01CD08BEF0069D9ED = {
 						CreatedOnToolsVersion = 7.2;
 					};
@@ -318,11 +423,27 @@
 			projectRoot = "";
 			targets = (
 				0DA6F9E01CD08BEF0069D9ED /* FTPFox */,
+				0D13A9BA1CDF38D00056E335 /* FTPFoxTests */,
+				0D13A9C81CDF38D70056E335 /* FTPFoxUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		0D13A9B91CDF38D00056E335 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0D13A9C71CDF38D70056E335 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0DA6F9DF1CD08BEF0069D9ED /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -342,6 +463,22 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		0D13A9B71CDF38D00056E335 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0D13A9BE1CDF38D00056E335 /* FTPFoxTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		0D13A9C51CDF38D70056E335 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0D13A9CC1CDF38D70056E335 /* FTPFoxUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		0DA6F9DD1CD08BEF0069D9ED /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -374,6 +511,19 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		0D13A9C11CDF38D00056E335 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0DA6F9E01CD08BEF0069D9ED /* FTPFox */;
+			targetProxy = 0D13A9C01CDF38D00056E335 /* PBXContainerItemProxy */;
+		};
+		0D13A9CF1CDF38D70056E335 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 0DA6F9E01CD08BEF0069D9ED /* FTPFox */;
+			targetProxy = 0D13A9CE1CDF38D70056E335 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		0DA6F9ED1CD08BEF0069D9ED /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -394,6 +544,60 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		0D13A9C31CDF38D00056E335 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				INFOPLIST_FILE = FTPFoxTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.FTPFoxTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FTPFox.app/FTPFox";
+			};
+			name = Debug;
+		};
+		0D13A9C41CDF38D00056E335 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CLANG_ANALYZER_NONNULL = YES;
+				INFOPLIST_FILE = FTPFoxTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.FTPFoxTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/FTPFox.app/FTPFox";
+			};
+			name = Release;
+		};
+		0D13A9D11CDF38D70056E335 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				INFOPLIST_FILE = FTPFoxUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.FTPFoxUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = FTPFox;
+			};
+			name = Debug;
+		};
+		0D13A9D21CDF38D70056E335 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				INFOPLIST_FILE = FTPFoxUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.3;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.FTPFoxUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = FTPFox;
+			};
+			name = Release;
+		};
 		0DA6F9F61CD08BEF0069D9ED /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -515,6 +719,22 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		0D13A9C21CDF38D00056E335 /* Build configuration list for PBXNativeTarget "FTPFoxTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0D13A9C31CDF38D00056E335 /* Debug */,
+				0D13A9C41CDF38D00056E335 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		0D13A9D01CDF38D70056E335 /* Build configuration list for PBXNativeTarget "FTPFoxUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0D13A9D11CDF38D70056E335 /* Debug */,
+				0D13A9D21CDF38D70056E335 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		0DA6F9DC1CD08BEE0069D9ED /* Build configuration list for PBXProject "FTPFox" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

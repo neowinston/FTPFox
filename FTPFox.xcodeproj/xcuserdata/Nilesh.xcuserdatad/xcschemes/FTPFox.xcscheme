@@ -28,6 +28,26 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "0D13A99C1CDF38680056E335"
+               BuildableName = "FTPFoxUITests.xctest"
+               BlueprintName = "FTPFoxUITests"
+               ReferencedContainer = "container:FTPFox.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "0D13A9AA1CDF38700056E335"
+               BuildableName = "FTPFoxTests.xctest"
+               BlueprintName = "FTPFoxTests"
+               ReferencedContainer = "container:FTPFox.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

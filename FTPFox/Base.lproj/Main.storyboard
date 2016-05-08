@@ -28,20 +28,12 @@
                                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="Pcz-HG-eAJ">
                                             <inset key="imageInsets" minX="-10" minY="0.0" maxX="0.0" maxY="0.0"/>
                                             <connections>
-                                                <action selector="cancelButtonClicked:" destination="2lQ-jz-9pN" id="g5g-Zw-oVI"/>
+                                                <action selector="cancelButtonClicked:" destination="2lQ-jz-9pN" id="2Xz-xU-AcG"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
                                 </items>
                             </navigationBar>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Host Name (or IP)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xfB-vb-iYV">
-                                <rect key="frame" x="20" y="84" width="560" height="30"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="URL"/>
-                                <connections>
-                                    <outlet property="delegate" destination="2lQ-jz-9pN" id="Vwb-lR-hhz"/>
-                                </connections>
-                            </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7e8-Yd-0kn">
                                 <rect key="frame" x="20" y="134" width="560" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -77,6 +69,14 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Host Name (or IP)" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="xfB-vb-iYV">
+                                <rect key="frame" x="20" y="84" width="560" height="30"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="URL"/>
+                                <connections>
+                                    <outlet property="delegate" destination="2lQ-jz-9pN" id="Vwb-lR-hhz"/>
+                                </connections>
+                            </textField>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -111,6 +111,7 @@
                         </variation>
                     </view>
                     <connections>
+                        <outlet property="cancelBarButton" destination="Pcz-HG-eAJ" id="y51-pM-mMH"/>
                         <outlet property="loginButton" destination="82C-xX-zAd" id="ghb-uL-dsQ"/>
                         <outlet property="passwordTextField" destination="ETL-5f-8Km" id="BQg-Gh-0LS"/>
                         <outlet property="savePasswordSwitch" destination="f3v-hJ-gpu" id="N1F-w5-ZeI"/>
@@ -198,7 +199,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="e13-Y7-1fn" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2326" y="-898"/>
+            <point key="canvasLocation" x="-2257" y="-847"/>
         </scene>
         <!--Files-->
         <scene sceneID="uzi-T3-aqx">
